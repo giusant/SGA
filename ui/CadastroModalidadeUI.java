@@ -64,8 +64,8 @@ public class CadastroModalidadeUI extends JFrame {
 		tabbedPane.setBounds(5, 5, 784, 461);
 		contentPane.add(tabbedPane);
 		
-		JPanel Cadastrar = new JPanel();
-		tabbedPane.addTab("Cadastrar", null, Cadastrar, null);
+		JPanel BtnSalvarCadastrar = new JPanel();
+		tabbedPane.addTab("Cadastrar", null, BtnSalvarCadastrar, null);
 		
 		JPanel Editar = new JPanel();
 		tabbedPane.addTab("Editar", null, Editar, null);
@@ -125,24 +125,24 @@ public class CadastroModalidadeUI extends JFrame {
 		textAreaDescricaoEditar.setBounds(150, 277, 300, 145);
 		panel.add(textAreaDescricaoEditar);
 		
-		JButton button = new JButton("Salvar");
-		button.setFont(new Font("Tahoma", Font.BOLD, 18));
-		button.setBounds(501, 302, 127, 31);
-		panel.add(button);
+		JButton btnSalvarModalidadeEditar = new JButton("Salvar");
+		btnSalvarModalidadeEditar.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnSalvarModalidadeEditar.setBounds(501, 302, 127, 31);
+		panel.add(btnSalvarModalidadeEditar);
 		
-		JButton button_1 = new JButton("Cancelar");
-		button_1.setFont(new Font("Tahoma", Font.BOLD, 18));
-		button_1.setBounds(501, 358, 127, 31);
-		panel.add(button_1);
+		JButton btnCancelarModalidadeEditar = new JButton("Cancelar");
+		btnCancelarModalidadeEditar.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnCancelarModalidadeEditar.setBounds(501, 358, 127, 31);
+		panel.add(btnCancelarModalidadeEditar);
 		
 		JPanel Excluir = new JPanel();
 		tabbedPane.addTab("Excluir", null, Excluir, null);
 		Excluir.setLayout(null);
 		
-		JButton btnExcluir = new JButton("Excluir");
-		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnExcluir.setBounds(526, 315, 129, 29);
-		Excluir.add(btnExcluir);
+		JButton btnExcluirModalidade = new JButton("Excluir");
+		btnExcluirModalidade.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnExcluirModalidade.setBounds(526, 315, 129, 29);
+		Excluir.add(btnExcluirModalidade);
 		
 		JComboBox comboBoxModalidadesExcluir = new JComboBox();
 		comboBoxModalidadesExcluir.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -196,67 +196,67 @@ public class CadastroModalidadeUI extends JFrame {
 		JLabel lblModalidadesCadastrar = new JLabel("Modalidades:");
 		lblModalidadesCadastrar.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblModalidadesCadastrar.setBounds(35, 37, 150, 25);
-		Cadastrar.add(lblModalidadesCadastrar);
+		BtnSalvarCadastrar.add(lblModalidadesCadastrar);
 		
 		JComboBox comboBoxModalidadeCadastrar = new JComboBox();
 		comboBoxModalidadeCadastrar.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		comboBoxModalidadeCadastrar.setBounds(178, 38, 394, 25);
-		Cadastrar.add(comboBoxModalidadeCadastrar);
-		Cadastrar.setLayout(null);
+		BtnSalvarCadastrar.add(comboBoxModalidadeCadastrar);
+		BtnSalvarCadastrar.setLayout(null);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(35, 82, 637, 2);
-		Cadastrar.add(separator);
+		BtnSalvarCadastrar.add(separator);
 		
 		JLabel lblNovaModalidadeCadastrar = new JLabel("Nova Modalidade:");
 		lblNovaModalidadeCadastrar.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblNovaModalidadeCadastrar.setBounds(35, 95, 181, 25);
-		Cadastrar.add(lblNovaModalidadeCadastrar);
+		BtnSalvarCadastrar.add(lblNovaModalidadeCadastrar);
 		
 		JLabel lblNomeCadastrar = new JLabel("Nome:");
 		lblNomeCadastrar.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblNomeCadastrar.setBounds(35, 155, 65, 25);
-		Cadastrar.add(lblNomeCadastrar);
+		BtnSalvarCadastrar.add(lblNomeCadastrar);
 		
 		textFieldNomeCadastrar = new JTextField();
 		textFieldNomeCadastrar.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		textFieldNomeCadastrar.setText("");
 		textFieldNomeCadastrar.setBounds(110, 154, 250, 28);
-		Cadastrar.add(textFieldNomeCadastrar);
+		BtnSalvarCadastrar.add(textFieldNomeCadastrar);
 		textFieldNomeCadastrar.setColumns(10);
 		
 		JLabel lblValorCadastrar = new JLabel("Valor:");
 		lblValorCadastrar.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblValorCadastrar.setBounds(35, 210, 60, 25);
-		Cadastrar.add(lblValorCadastrar);
+		BtnSalvarCadastrar.add(lblValorCadastrar);
 		
 		
 		textFieldValorCadastrar.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		textFieldValorCadastrar.setText("");
 		textFieldValorCadastrar.setColumns(10);
 		textFieldValorCadastrar.setBounds(110, 209, 156, 28);
-		Cadastrar.add(textFieldValorCadastrar);
+		BtnSalvarCadastrar.add(textFieldValorCadastrar);
 		
 		JLabel lblDescricaoCadastrar = new JLabel("Descri\u00E7\u00E3o:");
 		lblDescricaoCadastrar.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblDescricaoCadastrar.setBounds(35, 276, 105, 25);
-		Cadastrar.add(lblDescricaoCadastrar);
+		BtnSalvarCadastrar.add(lblDescricaoCadastrar);
 		
 		JTextArea textAreaDescricaoCadastrar = new JTextArea();
 		textAreaDescricaoCadastrar.setBackground(SystemColor.text);
 		textAreaDescricaoCadastrar.setFont(new Font("Monospaced", Font.PLAIN, 16));
 		textAreaDescricaoCadastrar.setBounds(150, 277, 300, 145);
-		Cadastrar.add(textAreaDescricaoCadastrar);
+		BtnSalvarCadastrar.add(textAreaDescricaoCadastrar);
 		
-		JButton btnSalvar = new JButton("Salvar");
-		btnSalvar.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnSalvar.setBounds(501, 302, 127, 31);
-		Cadastrar.add(btnSalvar);
+		JButton btnSalvarModalidadeCadastrar = new JButton("Salvar");
+		btnSalvarModalidadeCadastrar.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnSalvarModalidadeCadastrar.setBounds(501, 302, 127, 31);
+		BtnSalvarCadastrar.add(btnSalvarModalidadeCadastrar);
 		
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnCancelar.setBounds(501, 358, 127, 31);
-		Cadastrar.add(btnCancelar);
+		JButton btnCancelarModalidadeCadastrar = new JButton("Cancelar");
+		btnCancelarModalidadeCadastrar.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnCancelarModalidadeCadastrar.setBounds(501, 358, 127, 31);
+		BtnSalvarCadastrar.add(btnCancelarModalidadeCadastrar);
 	}
 
 }
