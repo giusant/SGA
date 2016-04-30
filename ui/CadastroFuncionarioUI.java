@@ -415,6 +415,11 @@ public class CadastroFuncionarioUI extends JFrame {
 		textFieldNomeFuncionarioEditar.setBounds(99, 98, 586, 31);
 		Editar.add(textFieldNomeFuncionarioEditar);
 		
+		JButton btnSelecionarFuncEditar = new JButton("Selecionar");
+		btnSelecionarFuncEditar.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnSelecionarFuncEditar.setBounds(708, 38, 145, 31);
+		Editar.add(btnSelecionarFuncEditar);
+		
 		JPanel Excluir = new JPanel();
 		tabbedPane.addTab("Excluir", null, Excluir, null);
 		Excluir.setLayout(null);
@@ -581,5 +586,10 @@ public class CadastroFuncionarioUI extends JFrame {
 		});
 		BtnExcluirFuncionario.setBounds(546, 559, 109, 31);
 		Excluir.add(BtnExcluirFuncionario);
+		
+		JButton btnSelecionarFuncExcluir = new JButton("Selecionar");
+		btnSelecionarFuncExcluir.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnSelecionarFuncExcluir.setBounds(714, 29, 145, 31);
+		Excluir.add(btnSelecionarFuncExcluir);
 	}
 }
