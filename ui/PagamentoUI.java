@@ -61,7 +61,7 @@ public class PagamentoUI extends JFrame {
 		tabbedPane.addTab("Mensalidade", null, panel, null);
 		panel.setLayout(null);
 		
-		JLabel lblAlunosPagMensalidade = new JLabel("Alunos:");
+		JLabel lblAlunosPagMensalidade = new JLabel("Aluno:");
 		lblAlunosPagMensalidade.setFont(new Font("Tahoma", Font.BOLD, 19));
 		lblAlunosPagMensalidade.setBounds(41, 25, 135, 23);
 		panel.add(lblAlunosPagMensalidade);
