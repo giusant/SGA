@@ -6,6 +6,7 @@ public class EnderecoDTO {
 	private String cidade;
 	private String rua;
 	private int numero;
+	private String estado;
 	
 	public int getIdEndereco() {
 		return idEndereco;
@@ -48,6 +49,12 @@ public class EnderecoDTO {
 	}
 	public void setComplemento(String complemento) {
 		this.complemento = complemento;
+	}
+	public String getEstado() {
+		return estado;
+	}
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 	private int cep;
 	private String complemento;

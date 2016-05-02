@@ -1,6 +1,12 @@
 package br.si.es.sga.dto;
 
-import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
+
+
 
 public class AlunoDTO {
 	private int idAluno;
@@ -12,6 +18,9 @@ public class AlunoDTO {
 	private ModalidadeDTO idModalidade;
 	private EnderecoDTO idEndereco;
 	private byte[] foto;
+	private String sexo;
+	
+	//private DateFormat dateFormtBD = new SimpleDateFormat("YYYY/MM/DD");
 	
 	public int getIdAluno() {
 		return idAluno;
@@ -26,10 +35,11 @@ public class AlunoDTO {
 		this.nomeAluno = nomeAluno;
 	}
 	public Date getDataNasc() {
+		
 		return dataNasc;
 	}
-	public void setDataNasc(Date dataNasc) {
-		this.dataNasc = dataNasc;
+	public void setDataNasc(Date date) {
+		this.dataNasc = date;
 	}
 	public Date getDataVencimento() {
 		return dataVencimento;
@@ -38,10 +48,17 @@ public class AlunoDTO {
 		this.dataVencimento = dataVencimento;
 	}
 	public Date getDataMatricula() {
-		return dataMatricula;
+//		 String date = dateFormtBD.format(dataMatricula);
+//		try {
+//			dataMatricula = dateFormtBD.parse(date);
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		 return dataMatricula;
 	}
-	public void setDataMatricula(Date dataMatricula) {
-		this.dataMatricula = dataMatricula;
+	public void setDataMatricula(Date date) {
+		this.dataMatricula = date;
 	}
 	public String getTelefoneAluno() {
 		return telefoneAluno;
@@ -67,6 +84,12 @@ public class AlunoDTO {
 	}
 	public void setIdEndereco(EnderecoDTO idEndereco) {
 		this.idEndereco = idEndereco;
+	}
+	public String getSexo() {
+		return sexo;
+	}
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
 	}
 	
 }

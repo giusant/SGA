@@ -4,10 +4,11 @@ import java.sql.Date;
 
 public class AtividadeDTO {
 	private int idAtividade;
-	private enum atividade {entrada, saida, diaria};
+	private String tipo; // {entrada, saida, diaria};
 	private String referencia;
 	private double valor;
 	private Date data;
+	private UsuarioDTO usuario;
 	
 	public int getIdAtividade() {
 		return idAtividade;
@@ -32,5 +33,17 @@ public class AtividadeDTO {
 	}
 	public void setData(Date data) {
 		this.data = data;
+	}
+	public UsuarioDTO getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(UsuarioDTO usuario) {
+		this.usuario = usuario;
+	}
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 }
