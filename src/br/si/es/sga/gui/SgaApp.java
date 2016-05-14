@@ -6,7 +6,7 @@ public class SgaApp {
 		
 		LoginUI TelaLogin = new LoginUI();
 		TelaLogin.setVisible(true);
-	
+		
 	}
 
 }

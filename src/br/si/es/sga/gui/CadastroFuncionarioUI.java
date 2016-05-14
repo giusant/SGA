@@ -84,6 +84,9 @@ public class CadastroFuncionarioUI extends JFrame {
 	private final ButtonGroup buttonGroupFuncionarioExcluir = new ButtonGroup();
 	private final ButtonGroup buttonGroupFuncionarioEditar = new ButtonGroup();
 	private final ButtonGroup buttonGroupFuncionarioCadastrar = new ButtonGroup();
+	private JTextField textFieldCPF;
+	private JTextField textFieldCPFeditar;
+	private JTextField textFieldCPFexcluir;
 	/**
 	 * Launch the application.
 	 */
@@ -136,18 +139,18 @@ public class CadastroFuncionarioUI extends JFrame {
 		rdbtnGerenteFuncionarioCadastro = new JRadioButton("Gerente");
 		buttonGroupFuncionarioCadastrar.add(rdbtnGerenteFuncionarioCadastro);
 		rdbtnGerenteFuncionarioCadastro.setFont(new Font("Tahoma", Font.BOLD, 20));
-		rdbtnGerenteFuncionarioCadastro.setBounds(315, 97, 109, 23);
+		rdbtnGerenteFuncionarioCadastro.setBounds(230, 97, 109, 23);
 		Cadastrar.add(rdbtnGerenteFuncionarioCadastro);
 		
 		rdbtnFuncionrioFuncionarioCadastro = new JRadioButton("Funcion\u00E1rio");
 		buttonGroupFuncionarioCadastrar.add(rdbtnFuncionrioFuncionarioCadastro);
 		rdbtnFuncionrioFuncionarioCadastro.setFont(new Font("Tahoma", Font.BOLD, 20));
-		rdbtnFuncionrioFuncionarioCadastro.setBounds(315, 148, 145, 23);
+		rdbtnFuncionrioFuncionarioCadastro.setBounds(350, 97, 145, 23);
 		Cadastrar.add(rdbtnFuncionrioFuncionarioCadastro);
 		
 		JLabel lblTipoDeUsuarioFuncionarioCadastro = new JLabel("Tipo de Usu\u00E1rio:");
 		lblTipoDeUsuarioFuncionarioCadastro.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblTipoDeUsuarioFuncionarioCadastro.setBounds(47, 117, 177, 31);
+		lblTipoDeUsuarioFuncionarioCadastro.setBounds(47, 93, 177, 31);
 		Cadastrar.add(lblTipoDeUsuarioFuncionarioCadastro);
 		
 		JLabel lblEnderecoFuncionarioCadastro = new JLabel("Endere\u00E7o");
@@ -287,6 +290,7 @@ public class CadastroFuncionarioUI extends JFrame {
 					usuarioDTO.setLogin(txtFieldNomeDeUsuarioFuncionarioCadastro.getText());
 					usuarioDTO.setSenha(String.valueOf(passwordFieldSenhaFuncionarioCadastro.getPassword()));
 					usuarioDTO.setTelefoneUsuario(textFieldTelefoneFuncCadastro.getText());
+					usuarioDTO.setCpfUsuario(Long.parseLong((textFieldCPF.getText())));
 					usuarioDTO.setEndereco(enderecoDTO);
 					
 					if(!String.valueOf(passwordFieldConfirmaSenhaFuncionarioCadastro.getPassword()).equals(String.valueOf(passwordFieldSenhaFuncionarioCadastro.getPassword()))){
@@ -324,6 +328,7 @@ public class CadastroFuncionarioUI extends JFrame {
 				textFieldTelefoneFuncCadastro.setText("");
 				passwordFieldSenhaFuncionarioCadastro.setText("");
 				passwordFieldConfirmaSenhaFuncionarioCadastro.setText("");
+				textFieldCPF.setText("");
 				//dados do endereço
 				textFieldBairroFuncionarioCadastro.setText("");
 				textFieldCidadeFuncionarioCadastro.setText("");
@@ -361,13 +366,24 @@ public class CadastroFuncionarioUI extends JFrame {
 		textFieldTelefoneFuncCadastro.setBounds(157, 374, 224, 26);
 		Cadastrar.add(textFieldTelefoneFuncCadastro);
 		
+		JLabel lblCpf = new JLabel("CPF:");
+		lblCpf.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblCpf.setBounds(47, 137, 52, 31);
+		Cadastrar.add(lblCpf);
+		
+		textFieldCPF = new JTextField();
+		textFieldCPF.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		textFieldCPF.setColumns(10);
+		textFieldCPF.setBounds(97, 140, 135, 25);
+		Cadastrar.add(textFieldCPF);
+		
 		JPanel Editar = new JPanel();
 		tabbedPane.addTab("Editar", null, Editar, null);
 		Editar.setLayout(null);
 		
 		JLabel lblNomesFuncionarioEditar = new JLabel("Funcion\u00E1rios:");
 		lblNomesFuncionarioEditar.setFont(new Font("Tahoma", Font.BOLD, 19));
-		lblNomesFuncionarioEditar.setBounds(16, 46, 135, 23);
+		lblNomesFuncionarioEditar.setBounds(10, 27, 135, 23);
 		Editar.add(lblNomesFuncionarioEditar);
 		
 		JLabel lblTipoDeUsuarioFuncionarioEditar = new JLabel("Tipo de Usu\u00E1rio:");
@@ -535,6 +551,7 @@ public class CadastroFuncionarioUI extends JFrame {
 					usuarioDTO.setLogin(txtFieldNomedeUsuarioFuncionarioEditar.getText());
 					usuarioDTO.setSenha(String.valueOf(passwordFieldSenhaFuncEditar.getPassword()));
 					usuarioDTO.setTelefoneUsuario(textFieldTelefoneFuncEditar.getText());
+					usuarioDTO.setCpfUsuario(Long.parseLong((textFieldCPFeditar.getText())));
 					usuarioDTO.setEndereco(enderecoDTO);
 
 					if(!String.valueOf(passwordFieldConfSenhaFuncEditar.getPassword()).equals(String.valueOf(passwordFieldSenhaFuncEditar.getPassword()))){
@@ -572,6 +589,7 @@ public class CadastroFuncionarioUI extends JFrame {
 				textFieldTelefoneFuncEditar.setText("");
 				passwordFieldSenhaFuncEditar.setText("");
 				passwordFieldConfSenhaFuncEditar.setText("");
+				textFieldCPFeditar.setText("");
 				//dados do endereço
 				txtFieldBairroFuncionarioEditar.setText("");
 				txtFieldCidadeFuncionarioEditar.setText("");
@@ -589,13 +607,13 @@ public class CadastroFuncionarioUI extends JFrame {
 		
 		JLabel lblNomeFuncionarioEditar = new JLabel("Nome:");
 		lblNomeFuncionarioEditar.setFont(new Font("Tahoma", Font.BOLD, 19));
-		lblNomeFuncionarioEditar.setBounds(16, 101, 76, 23);
+		lblNomeFuncionarioEditar.setBounds(10, 68, 76, 23);
 		Editar.add(lblNomeFuncionarioEditar);
 		
 		textFieldNomeFuncionarioEditar = new JTextField();
 		textFieldNomeFuncionarioEditar.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		textFieldNomeFuncionarioEditar.setColumns(10);
-		textFieldNomeFuncionarioEditar.setBounds(99, 98, 586, 31);
+		textFieldNomeFuncionarioEditar.setBounds(87, 65, 586, 31);
 		Editar.add(textFieldNomeFuncionarioEditar);
 
 		JButton btnSelecionarFuncEditar = new JButton("Selecionar");
@@ -606,7 +624,7 @@ public class CadastroFuncionarioUI extends JFrame {
 				}
 		});
 		btnSelecionarFuncEditar.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnSelecionarFuncEditar.setBounds(708, 38, 145, 31);
+		btnSelecionarFuncEditar.setBounds(695, 24, 145, 31);
 		Editar.add(btnSelecionarFuncEditar);
 		
 		JLabel lblTelefoneFuncEditar = new JLabel("Telefone\r\n:");
@@ -626,12 +644,12 @@ public class CadastroFuncionarioUI extends JFrame {
 		
 		JLabel lblFuncionarios = new JLabel("Funcion\u00E1rios:");
 		lblFuncionarios.setFont(new Font("Tahoma", Font.BOLD, 19));
-		lblFuncionarios.setBounds(26, 37, 147, 23);
+		lblFuncionarios.setBounds(10, 29, 147, 23);
 		Excluir.add(lblFuncionarios);
 		
 		JLabel lblNomeFuncExcluir = new JLabel("Nome:");
 		lblNomeFuncExcluir.setFont(new Font("Tahoma", Font.BOLD, 19));
-		lblNomeFuncExcluir.setBounds(26, 92, 76, 23);
+		lblNomeFuncExcluir.setBounds(10, 63, 76, 23);
 		Excluir.add(lblNomeFuncExcluir);
 		
 		JLabel lblTipoDeUsuarioFuncExcluir = new JLabel("Tipo de Usu\u00E1rio:");
@@ -643,7 +661,7 @@ public class CadastroFuncionarioUI extends JFrame {
 		txtFieldFuncExcluir.setEnabled(false);
 		txtFieldFuncExcluir.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtFieldFuncExcluir.setColumns(10);
-		txtFieldFuncExcluir.setBounds(109, 89, 600, 31);
+		txtFieldFuncExcluir.setBounds(87, 63, 600, 31);
 		Excluir.add(txtFieldFuncExcluir);
 		
 		rbtnGerenteFuncExcluir = new JRadioButton("Gerente");
@@ -847,8 +865,19 @@ public class CadastroFuncionarioUI extends JFrame {
 			//MessagensUtil.addMsg(MainFrame.this, e.getMessage());
 		}
 
-		comboBoxFuncionarioEditar.setBounds(159, 38, 526, 31);
+		comboBoxFuncionarioEditar.setBounds(159, 24, 526, 31);
 		Editar.add(comboBoxFuncionarioEditar);
+		
+		JLabel labelCPFeditar = new JLabel("CPF:");
+		labelCPFeditar.setFont(new Font("Tahoma", Font.BOLD, 20));
+		labelCPFeditar.setBounds(10, 107, 52, 31);
+		Editar.add(labelCPFeditar);
+		
+		textFieldCPFeditar = new JTextField();
+		textFieldCPFeditar.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		textFieldCPFeditar.setColumns(10);
+		textFieldCPFeditar.setBounds(60, 110, 135, 25);
+		Editar.add(textFieldCPFeditar);
 
 		// codigo que converte o atributo para uma combobox Excluir
 		try{
@@ -863,12 +892,24 @@ public class CadastroFuncionarioUI extends JFrame {
 			//MessagensUtil.addMsg(MainFrame.this, e.getMessage());
 		}
 
-		comboBoxFuncExcluir.setBounds(168, 29, 541, 31);
+		comboBoxFuncExcluir.setBounds(152, 26, 541, 31);
 		Excluir.add(comboBoxFuncExcluir);
+		
+		JLabel labelCPFexcluir = new JLabel("CPF:");
+		labelCPFexcluir.setFont(new Font("Tahoma", Font.BOLD, 20));
+		labelCPFexcluir.setBounds(10, 103, 52, 31);
+		Excluir.add(labelCPFexcluir);
+		
+		textFieldCPFexcluir = new JTextField();
+		textFieldCPFexcluir.setEnabled(false);
+		textFieldCPFexcluir.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		textFieldCPFexcluir.setColumns(10);
+		textFieldCPFexcluir.setBounds(87, 109, 135, 25);
+		Excluir.add(textFieldCPFexcluir);
 		
 	
 	}
-
+	// utilizando esse codigo
 	public String[] converteUsuario(List<UsuarioDTO> listarUsuario) {
 		String[] result = new String[listarUsuario.size()];
 		for(int i = 0; i < listarUsuario.size();i++){
@@ -878,6 +919,7 @@ public class CadastroFuncionarioUI extends JFrame {
 		}
 		return result;
 	}
+	//não estou usando esse codigo
 	public UsuarioDTO[] converte(List<UsuarioDTO> listarUsuario) {
 		UsuarioDTO[] result = new UsuarioDTO[listarUsuario.size()];
 		for(int i = 0; i < listarUsuario.size();i++){
@@ -935,6 +977,7 @@ public class CadastroFuncionarioUI extends JFrame {
 			this.textFieldTelefoneFuncEditar.setText((usuarioDTO.getTelefoneUsuario()));
 			this.passwordFieldSenhaFuncEditar.setText(usuarioDTO.getSenha());
 			this.passwordFieldConfSenhaFuncEditar.setText(usuarioDTO.getSenha());
+			this.textFieldCPFeditar.setText(String.valueOf(usuarioDTO.getCpfUsuario()));
 			//dados do endereço
 			this.txtFieldBairroFuncionarioEditar.setText(usuarioDTO.getEndereco().getBairro());
 			this.txtFieldCidadeFuncionarioEditar.setText(usuarioDTO.getEndereco().getCidade());
@@ -952,6 +995,7 @@ public class CadastroFuncionarioUI extends JFrame {
 			this.rbtnGerenteFuncExcluir.setSelected(usuarioDTO.isGerente());
 			this.txtFieldNDeUsuarioFuncExcluir.setText(usuarioDTO.getLogin().toString());
 			this.textFieldTelefoneFuncExcluir.setText((usuarioDTO.getTelefoneUsuario()));
+			this.textFieldCPFexcluir.setText(String.valueOf(usuarioDTO.getCpfUsuario()));
 			this.passwordFieldSenhaFuncExcluir.setText(usuarioDTO.getSenha());
 			this.passwordFieldConfASenhaFuncExcluir.setText(usuarioDTO.getSenha());
 			//dados do endereço

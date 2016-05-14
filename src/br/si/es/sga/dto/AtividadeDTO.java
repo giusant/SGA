@@ -1,6 +1,8 @@
 package br.si.es.sga.dto;
 
-import java.sql.Date;
+import java.util.Date;
+
+
 
 public class AtividadeDTO {
 	private int idAtividade;
@@ -31,8 +33,8 @@ public class AtividadeDTO {
 	public Date getData() {
 		return data;
 	}
-	public void setData(Date data) {
-		this.data = data;
+	public void setData(java.util.Date date) {
+		this.data = date;
 	}
 	public UsuarioDTO getUsuario() {
 		return usuario;

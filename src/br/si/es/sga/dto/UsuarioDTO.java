@@ -7,8 +7,15 @@ public class UsuarioDTO {
 	private String senha;
 	private String telefoneUsuario;
 	private EnderecoDTO endereco;
+	private long cpfUsuario;
 	
 
+	public long getCpfUsuario() {
+		return cpfUsuario;
+	}
+	public void setCpfUsuario(long cpfUsuario) {
+		this.cpfUsuario = cpfUsuario;
+	}
 	public String getNomeUsuario() {
 		return nomeUsuario;
 	}

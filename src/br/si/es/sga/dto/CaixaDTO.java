@@ -1,9 +1,12 @@
 package br.si.es.sga.dto;
 
+import java.util.Date;
+
 public class CaixaDTO {
 	private int idCaixa;
 	private double valorDiario;
 	private double valorTotal;
+	private Date data;
 	
 	public int getIdCaixa() {
 		return idCaixa;
@@ -22,5 +25,11 @@ public class CaixaDTO {
 	}
 	public void setValorTotal(double valorTotal) {
 		this.valorTotal = valorTotal;
+	}
+	public Date getData() {
+		return data;
+	}
+	public void setData(Date data) {
+		this.data = data;
 	}
 }

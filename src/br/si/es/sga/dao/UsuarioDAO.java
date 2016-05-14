@@ -31,7 +31,7 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO>{
 			Connection connection =  ConexaoUtil.getInstance().getConnection();
 			
 			String sql ="INSERT INTO USUARIO(nomeUsuario , isGerente, login, senha, telefoneUsuario, "
-					+ " Endereco_idEndereco )" + " VALUES(?,?,?,?,?,?)";
+					+ " Endereco_idEndereco, cpfUsuario )" + " VALUES(?,?,?,?,?,?,?)";
 			PreparedStatement Statement = connection.prepareStatement(sql);
 			Statement.setString(1, usuarioDTO.getNomeUsuario());
 			Statement.setBoolean(2, usuarioDTO.isGerente());
@@ -39,6 +39,7 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO>{
 			Statement.setString(4, usuarioDTO.getSenha());
 			Statement.setString(5, usuarioDTO.getTelefoneUsuario());
 			Statement.setInt(6, chaveEnd);
+			Statement.setLong(7, usuarioDTO.getCpfUsuario());
 		
 			
 			Statement.execute();
@@ -55,8 +56,8 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO>{
 		try{
 			Connection connection =  ConexaoUtil.getInstance().getConnection();
 			
-			String sql =  "UPDATE USUARIO " + "SET nomeUsuario =?, " + "isGerente = ?, " + "senha =?, " + " telefoneUsuario =? "
-			  + 
+			String sql =  "UPDATE USUARIO " + "SET nomeUsuario =?, " + "isGerente = ?, " + "senha =?, " + " telefoneUsuario =?, "
+			  + "cpfUsuario = ? " + 
 			" WHERE login =?";
 			
 			PreparedStatement Statement = connection.prepareStatement(sql);
@@ -65,7 +66,9 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO>{
 			Statement.setString(3, usuarioDTO.getSenha());
 			Statement.setString(4,usuarioDTO.getTelefoneUsuario());
 			Statement.setString(5,usuarioDTO.getLogin());
-				
+			Statement.setLong(6, usuarioDTO.getCpfUsuario());
+			
+			
 			Statement.execute();
 			connection.close();
 			// atualiza agr o relacionamento endereço pessoa 
@@ -117,7 +120,8 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO>{
 				 usuarioDTO.setSenha(resultSet.getString("senha"));
 				 usuarioDTO.setTelefoneUsuario(resultSet.getString("telefoneUsuario"));
 				 usuarioDTO.setEndereco(enderecoDAO.buscarPorId(resultSet.getInt("Endereco_idEndereco")));
-				
+				 usuarioDTO.setCpfUsuario(resultSet.getLong("cpfUsuario"));
+				 
 				 listaUsuarios.add(usuarioDTO);
 			 }
 			 connection.close();
@@ -146,6 +150,9 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO>{
 					 usuarioDTO.setSenha(resultSet.getString("senha"));
 					 usuarioDTO.setTelefoneUsuario(resultSet.getString("telefoneUsuario"));
 					 usuarioDTO.setEndereco(enderecoDAO.buscarPorId(resultSet.getInt("Endereco_idEndereco")));
+					 usuarioDTO.setCpfUsuario(resultSet.getInt("cpfUsuario"));
+
+					 
 				}
 				connection.close();
 			}catch(Exception e){
@@ -172,6 +179,7 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO>{
 					 usuarioDTO.setSenha(resultSet.getString("senha"));
 					 usuarioDTO.setTelefoneUsuario(resultSet.getString("telefoneUsuario"));
 					 usuarioDTO.setEndereco(enderecoDAO.buscarPorId(resultSet.getInt("Endereco_idEndereco")));
+					 usuarioDTO.setCpfUsuario(resultSet.getInt("cpfUsuario"));
 					 
 				}
 				connection.close();
@@ -206,7 +214,8 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO>{
 				 usuarioDTO.setSenha(resultSet.getString("senha"));
 				 usuarioDTO.setTelefoneUsuario(resultSet.getString("telefoneUsuario"));
 				 usuarioDTO.setEndereco(enderecoDAO.buscarPorId(resultSet.getInt("Endereco_idEndereco")));
-				 
+				 usuarioDTO.setCpfUsuario(resultSet.getLong("cpfUsuario"));
+
 			}
 			connection.close();
 		}catch(Exception e){

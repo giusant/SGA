@@ -6,26 +6,54 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JTabbedPane;
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.JComboBox;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JTable;
+
+import br.si.es.sga.dto.AlunoDTO;
+import br.si.es.sga.dto.AtividadeDTO;
+import br.si.es.sga.dto.CaixaDTO;
+import br.si.es.sga.exeception.LogicException;
+import br.si.es.sga.logic.AlunoLogic;
+import br.si.es.sga.logic.AtividadeLogic;
+import br.si.es.sga.logic.CaixaLogic;
+import br.si.es.sga.logic.UsuarioLogic;
+import br.si.es.sga.util.MessageUtil;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import javax.swing.JScrollPane;
 
 public class PagamentoUI extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTable tableAlunos;
-	private JTextField textField_1;
-
+	private JTextField textFieldConsultaAluno;
+	private JTextField textFieldValorDiaria;
+	private JTable tableAluno;
+	private ArrayList<Integer> idsAlunos= new ArrayList<Integer>();
+	AlunoDTO alunoAtual;
+	private DateFormat dateFormtCompleto = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	private DateFormat dateFormtBD = new SimpleDateFormat("yyyy-MM-dd");
+	private DateFormat dateFormtUI = new SimpleDateFormat("dd/MM/yyyy");
+	
 	/**
 	 * Launch the application.
 	 */
@@ -70,38 +98,51 @@ public class PagamentoUI extends JFrame {
 		separator.setBounds(45, 123, 615, 2);
 		panel.add(separator);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		textField.setBounds(41, 70, 479, 29);
-		panel.add(textField);
-		textField.setColumns(10);
+		textFieldConsultaAluno = new JTextField();
+		textFieldConsultaAluno.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		textFieldConsultaAluno.setBounds(41, 70, 479, 29);
+		panel.add(textFieldConsultaAluno);
+		textFieldConsultaAluno.setColumns(10);
 		
 		JButton btnBuscarAlunos = new JButton("Pesquisar");
 		btnBuscarAlunos.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnBuscarAlunos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				preencheTabelaConsulta();
 			}
 		});
 		btnBuscarAlunos.setBounds(526, 70, 135, 29);
 		panel.add(btnBuscarAlunos);
 		
-		tableAlunos = new JTable();
-		tableAlunos.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		tableAlunos.setBounds(41, 150, 615, 217);
-		panel.add(tableAlunos);
-		
 		JButton btnRealizarPagamento = new JButton("Realizar Pagamento");
+		btnRealizarPagamento.setEnabled(false);
 		btnRealizarPagamento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource() == btnRealizarPagamento){
+					int idAluno = Integer.parseInt(tableAluno.getValueAt(tableAluno.getSelectedRow(), 0).toString());		
 					PagamentoOperacaoUI pagamentooperacao = new PagamentoOperacaoUI();
 					pagamentooperacao.setVisible(true);
+					pagamentooperacao.editar(idAluno);
+					
 				}
 			}
 		});
 		btnRealizarPagamento.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnRealizarPagamento.setBounds(243, 383, 247, 29);
 		panel.add(btnRealizarPagamento);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(45, 136, 615, 219);
+		panel.add(scrollPane);
+		
+		tableAluno = new JTable();
+		tableAluno.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				btnRealizarPagamento.setEnabled(true);
+			}
+		});
+		scrollPane.setViewportView(tableAluno);
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Di\u00E1ria", null, panel_1, null);
@@ -112,13 +153,40 @@ public class PagamentoUI extends JFrame {
 		lblRegistrarNovaDiaria.setBounds(127, 142, 354, 30);
 		panel_1.add(lblRegistrarNovaDiaria);
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		textField_1.setBounds(491, 142, 140, 30);
-		panel_1.add(textField_1);
-		textField_1.setColumns(10);
-		
+		textFieldValorDiaria = new JTextField();
+		textFieldValorDiaria.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		textFieldValorDiaria.setBounds(491, 142, 140, 30);
+		panel_1.add(textFieldValorDiaria);
+		textFieldValorDiaria.setColumns(10);
+
 		JButton btnAdicionarDiaria = new JButton("Adicionar");
+		btnAdicionarDiaria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				AtividadeDTO atividadeDTO = new AtividadeDTO();
+				AtividadeLogic atividadeLogic = new AtividadeLogic();
+				UsuarioLogic usuarioLogic =  new UsuarioLogic();
+				try {
+
+				atividadeDTO.setTipo("diaria");
+				atividadeDTO.setValor(Double.parseDouble(textFieldValorDiaria.getText()));
+				atividadeDTO.setReferencia("Referente a pagamento de diária");
+				String data = dateFormtCompleto.format(new java.util.Date());
+				atividadeDTO.setData(dateFormtCompleto.parse(data));
+				System.out.println(data);
+					atividadeDTO.setUsuario(usuarioLogic.getUsuarioPorLogin(LoginUI.UsuarioAtual));
+
+					atividadeLogic.cadastrar(atividadeDTO);
+					atualizarCaixa();
+				} catch (LogicException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
 		btnAdicionarDiaria.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnAdicionarDiaria.setBounds(239, 223, 126, 30);
 		panel_1.add(btnAdicionarDiaria);
@@ -129,5 +197,135 @@ public class PagamentoUI extends JFrame {
 		panel_1.add(btnCancelarDiaria);
 		this.setSize(800, 500);		//tamanho da tela
 		this.setLocationRelativeTo(null);	//situa a tela no centro
+		
+		
+		//Preencher a tabela consulta aluno
+		preencheTabelaConsulta();
+		
 	}
+	public void preencheTabelaConsulta(){
+		if(textFieldConsultaAluno.getText().equals("") || textFieldConsultaAluno ==  null ){
+			String nome = textFieldConsultaAluno.getText();
+			
+			AlunoLogic alunoLogic = new AlunoLogic();
+			
+			try {
+				String [][] lista = alunoLogic.Listagem(idsAlunos);
+				tableAluno.setModel(new DefaultTableModel(
+						lista,
+						new String[] {
+								"Número de Identificação","Nome"
+						}
+
+						){
+					/**
+							 * 
+							 */
+							private static final long serialVersionUID = 1L;
+
+					@SuppressWarnings("unused")
+					public boolean isCellEditable(int linha, int coluna){
+						return false;
+					}
+					
+					
+				});
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				MessageUtil.addMsg(PagamentoUI.this, e.getMessage());
+			}
+		}else{
+			String nome = textFieldConsultaAluno.getText();
+			
+			AlunoLogic alunoLogic = new AlunoLogic();
+			try {
+				String [][] lista = alunoLogic.ListagemPorNome(idsAlunos, nome);
+				tableAluno.setModel(new DefaultTableModel(
+						lista,
+						new String[] {
+								"Número de Identificação","Nome"
+								
+						}
+						){
+					/**
+							 * 
+							 */
+							private static final long serialVersionUID = 1L;
+
+					@SuppressWarnings("unused")
+					public boolean isCellEditable(int linha, int coluna){
+						return false;
+					}
+				});
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				MessageUtil.addMsg(PagamentoUI.this, e.getMessage());
+			}
+		}
+		
+		tableAluno.getColumnModel().getColumn(0).setMaxWidth(0);
+		tableAluno.getColumnModel().getColumn(0).setMinWidth(0);
+		tableAluno.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(0);
+		tableAluno.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
+		
+	}
+	public void atualizarCaixa(){
+		AtividadeLogic atividadeLogic = new AtividadeLogic();
+		CaixaDTO caixaDTO = new CaixaDTO();
+		CaixaLogic caixaLogic = new CaixaLogic();
+		double valorDiario;
+		double valorTotalMes;
+		 String dataInicial = dateFormtUI.format(new java.util.Date());
+		 String dataInicialBD = dateFormtBD.format(new java.util.Date());
+		 Calendar dataCalendarInicial = Calendar.getInstance();
+		 Calendar dataCalendarFinal = Calendar.getInstance();
+		 
+		try {
+			
+			dataCalendarInicial.setTime(dateFormtBD.parse(dataInicialBD));
+			System.out.println("dataCalendarinicial " + dateFormtBD.format(dataCalendarInicial.getTime()) );
+			dataCalendarInicial.set(Calendar.DAY_OF_MONTH, 1);
+			dataCalendarFinal.setTime(dataCalendarInicial.getTime());
+			dataCalendarFinal.add(Calendar.MONTH, 1);
+			dataCalendarFinal.add(Calendar.DAY_OF_MONTH, 1);
+			
+			valorDiario = atividadeLogic.valorDiario(dataInicialBD);
+			valorTotalMes = atividadeLogic.valorTotalMes(dateFormtBD.format(dataCalendarInicial.getTime()), dateFormtBD.format(dataCalendarFinal.getTime()));
+			
+			System.out.println("dataInicial " + dataInicial);
+			System.out.println("dataIniciaBD "+ dataInicialBD);
+			System.out.println("dataCalendarinicial " + dateFormtBD.format(dataCalendarInicial.getTime()) );
+			System.out.println("dataCalendarfinal " + dateFormtBD.format(dataCalendarFinal.getTime()) );
+			System.out.println("valor " + valorDiario);
+			System.out.println("valor " + valorTotalMes);
+			
+			caixaDTO.setValorDiario(valorDiario);
+			caixaDTO.setValorTotal(valorTotalMes);
+			caixaDTO.setData(dataCalendarInicial.getTime());
+			if(!caixaLogic.listar().isEmpty()) {
+			if(caixaLogic.getDataDoMes().compareTo(dataCalendarInicial.getTime()) == 0){
+				caixaDTO.setIdCaixa(caixaLogic.listar().get(0).getIdCaixa()); 
+				caixaLogic.atualizar(caixaDTO);
+			 }else{
+				 caixaLogic.deletar();
+				 caixaLogic.cadastrar(caixaDTO);
+			 }
+			}else{
+				caixaLogic.cadastrar(caixaDTO);
+			}
+			 
+		} catch (LogicException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+
+
 }

@@ -27,7 +27,7 @@ public class AlunoDAO implements GenericDAO<AlunoDTO> {
 			Connection connection =  ConexaoUtil.getInstance().getConnection();
 			
 			String sql ="INSERT INTO ALUNO(nomeAluno, dataNasc, dataVencimento, foto, dataMatricula, "
-					+ "telefoneAluno, modalidade_idModalidade, Endereco_idEndereco, sexo )" + " VALUES(?,?,?,?,?,?,?,?,?)";
+					+ "telefoneAluno, modalidade_idModalidade, Endereco_idEndereco, sexo, cpfAluno )" + " VALUES(?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement Statement = connection.prepareStatement(sql);
 			Statement.setString(1, alunoDTO.getNomeAluno());
 			Statement.setDate(2, new Date(alunoDTO.getDataNasc().getTime()));
@@ -38,6 +38,7 @@ public class AlunoDAO implements GenericDAO<AlunoDTO> {
 			Statement.setInt(7, alunoDTO.getIdModalidade().getIdModalidade());
 			Statement.setInt(8, chaveEnd);
 			Statement.setString(9, alunoDTO.getSexo());
+			Statement.setLong(10, alunoDTO.getCpfAluno());
 			
 			Statement.execute();
 			connection.close();
@@ -54,17 +55,16 @@ public class AlunoDAO implements GenericDAO<AlunoDTO> {
 			Connection connection =  ConexaoUtil.getInstance().getConnection();
 			
 			String sql ="INSERT INTO ALUNO(nomeAluno, dataNasc, dataMatricula, "
-					+ "telefoneAluno, Endereco_idEndereco, sexo )" + " VALUES(?,?,?,?,?,?)";
+					+ "telefoneAluno, Endereco_idEndereco, sexo, cpfAluno,foto )" + " VALUES(?,?,?,?,?,?,?,?)";
 			PreparedStatement Statement = connection.prepareStatement(sql);
 			Statement.setString(1, alunoDTO.getNomeAluno());
 			Statement.setDate(2,  new Date(alunoDTO.getDataNasc().getTime()));
-			//Statement.setDate(3,(Date) alunoDTO.getDataVencimento());
-			//Statement.setObject(4, alunoDTO.getFoto());
 			Statement.setDate(3, new Date( alunoDTO.getDataMatricula().getTime()));
 			Statement.setString(4, alunoDTO.getTelefoneAluno());
-			//Statement.setInt(7, alunoDTO.getIdModalidade().getIdModalidade());
 			Statement.setInt(5, chaveEnd);
 			Statement.setString(6, alunoDTO.getSexo());
+			Statement.setLong(7, alunoDTO.getCpfAluno());
+			Statement.setObject(8, alunoDTO.getFoto());
 			
 			Statement.execute();
 			connection.close();
@@ -82,16 +82,41 @@ public class AlunoDAO implements GenericDAO<AlunoDTO> {
 			Connection connection =  ConexaoUtil.getInstance().getConnection();
 			
 			String sql =  "UPDATE ALUNO " + "SET nomeAluno =?," + "telefoneAluno =?," 
-			 + "sexo = ?, " +"dataNasc = ? " + 
-			"WHERE idAluno =?";
+			 + "sexo = ?, " +"dataNasc = ?, " + " cpfAluno = ? " + 
+			" WHERE idAluno =?";
 			
 			PreparedStatement Statement = connection.prepareStatement(sql);
 			Statement.setString(1, alunoDTO.getNomeAluno());
 			Statement.setString(2, alunoDTO.getTelefoneAluno());
 			Statement.setString(3, alunoDTO.getSexo());
 			Statement.setDate(4, new Date( alunoDTO.getDataNasc().getTime()));
-			Statement.setInt(5, alunoDTO.getIdAluno());
-			//Statement.setInt(5,alunoDTO.getIdModalidade().getIdModalidade());
+			Statement.setLong(5, alunoDTO.getCpfAluno());
+			Statement.setInt(6, alunoDTO.getIdAluno());
+			
+				
+			Statement.execute();
+			connection.close();
+			// atualiza agr o relacionamento endereço pessoa 
+			enderecoDAO.atualizar(alunoDTO.getIdEndereco());
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new PersistenciaException(e.getMessage(), e);
+		}
+		
+	}
+	public void atualizarDataVencimento(AlunoDTO alunoDTO) throws PersistenciaException {
+		try{
+			Connection connection =  ConexaoUtil.getInstance().getConnection();
+			
+			String sql =  "UPDATE ALUNO " + "SET dataVencimento = ? " + 
+			" WHERE idAluno =?";
+			
+			PreparedStatement Statement = connection.prepareStatement(sql);
+			
+			Statement.setDate(1, new Date(alunoDTO.getDataVencimento().getTime()));
+			Statement.setInt(2, alunoDTO.getIdAluno());
+			
+			
 				
 			Statement.execute();
 			connection.close();
@@ -109,7 +134,7 @@ public class AlunoDAO implements GenericDAO<AlunoDTO> {
 		try{
 			Connection  connection = ConexaoUtil.getInstance().getConnection();
 		
-			String sql = "DELETE FROM ALUNO WHERE idAluno = ?";
+			String sql = "DELETE FROM ALUNO WHERE idAluno = "+ idAluno +" ";
 			
 			PreparedStatement Statement = connection.prepareStatement(sql);
 			Statement.setInt(1,idAluno);
@@ -144,10 +169,11 @@ public class AlunoDAO implements GenericDAO<AlunoDTO> {
 				 alunoDTO.setDataVencimento(resultSet.getDate("dataVencimento"));
 				 alunoDTO.setFoto(resultSet.getBytes("foto"));
 			//	alunoDTO.setDataMatricula(resultSet.getDate("dataMatricula"));
-				 alunoDTO.setIdModalidade(modalidadeDAO.buscarPorId(resultSet.getInt("Modalidade_idModalidade")));
+			//	 alunoDTO.setIdModalidade(modalidadeDAO.buscarPorId(resultSet.getInt("Modalidade_idModalidade")));
 				 alunoDTO.setIdEndereco(enderecoDAO.buscarPorId(resultSet.getInt("Endereco_idEndereco")));
 				 alunoDTO.setSexo(resultSet.getString("sexo"));
 				 alunoDTO.setTelefoneAluno(resultSet.getString("telefoneAluno"));
+				 alunoDTO.setCpfAluno(resultSet.getLong("cpfAluno"));
 				 
 				 listaAluno.add(alunoDTO);
 			 }
@@ -177,10 +203,12 @@ public class AlunoDAO implements GenericDAO<AlunoDTO> {
 					 alunoDTO.setDataNasc(resultSet.getDate("dataNasc"));
 					 alunoDTO.setDataVencimento(resultSet.getDate("dataVencimento"));
 					 alunoDTO.setFoto(resultSet.getBytes("foto"));
-					 alunoDTO.setIdModalidade(modalidadeDAO.buscarPorId(resultSet.getInt("Modalidade_idModalidade")));
+				//	 alunoDTO.setIdModalidade(modalidadeDAO.buscarPorId(resultSet.getInt("Modalidade_idModalidade")));
 					 alunoDTO.setIdEndereco(enderecoDAO.buscarPorId(resultSet.getInt("Endereco_idEndereco")));
 					 alunoDTO.setSexo(resultSet.getString("sexo"));
 					 alunoDTO.setTelefoneAluno(resultSet.getString("telefoneAluno"));
+					 alunoDTO.setCpfAluno(resultSet.getLong("cpfAluno"));
+					 
 				}
 				connection.close();
 			}catch(Exception e){
@@ -207,11 +235,11 @@ public class AlunoDAO implements GenericDAO<AlunoDTO> {
 				 alunoDTO.setDataVencimento(resultSet.getDate("dataVencimento"));
 				 alunoDTO.setFoto(resultSet.getBytes("foto"));
 			//	alunoDTO.setDataMatricula(resultSet.getDate("dataMatricula"));
-				 alunoDTO.setIdModalidade(modalidadeDAO.buscarPorId(resultSet.getInt("Modalidade_idModalidade")));
+			//	 alunoDTO.setIdModalidade(modalidadeDAO.buscarPorId(resultSet.getInt("Modalidade_idModalidade")));
 				 alunoDTO.setIdEndereco(enderecoDAO.buscarPorId(resultSet.getInt("Endereco_idEndereco")));
 				 alunoDTO.setTelefoneAluno(resultSet.getString("telefoneAluno"));
-				 
 				 alunoDTO.setSexo(resultSet.getString("sexo"));
+				 alunoDTO.setCpfAluno(resultSet.getLong("cpfAluno"));
 				 
 				 listaAluno.add(alunoDTO);
 			 }

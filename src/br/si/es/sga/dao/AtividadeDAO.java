@@ -1,10 +1,15 @@
 package br.si.es.sga.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 
 import br.si.es.sga.dto.AtividadeDTO;
@@ -25,7 +30,7 @@ public class AtividadeDAO implements GenericDAO<AtividadeDTO> {
 			Statement.setString( 1,atividadeDTO.getTipo());
 			Statement.setString(2, atividadeDTO.getReferencia());
 			Statement.setDouble(3,atividadeDTO.getValor());
-			Statement.setDate(4, atividadeDTO.getData());
+			Statement.setTimestamp(4, new Timestamp(atividadeDTO.getData().getTime()));
 			Statement.setString(5, atividadeDTO.getUsuario().getLogin());
 			
 			
@@ -105,6 +110,47 @@ public class AtividadeDAO implements GenericDAO<AtividadeDTO> {
 				throw new PersistenciaException(e.getMessage(), e);
 			}
 			return atividadeDTO;
+	}
+	public Double valorDiario(String  data) throws PersistenciaException {
+		 
+		 double valorDiario = 0;	
+		 try{
+				Connection connection = ConexaoUtil.getInstance().getConnection();
+				
+				String sql ="select sum(valor) from atividade where data between \" "+data+ " 00:00:00.00 \" "+" and \" "+ data+" 23:59:59.99\" "+ " and tipo =\"diaria\" ;";
+				PreparedStatement statement =  connection.prepareStatement(sql);
+				ResultSet resultSet = statement.executeQuery();
+				if(resultSet.next()){
+				valorDiario = resultSet.getDouble("sum(valor)");
+				}
+				
+				connection.close();
+			}catch(Exception e){
+				e.printStackTrace();
+				throw new PersistenciaException(e.getMessage(), e);
+			}
+			return valorDiario;
+	}
+	public Double valorTotalMes(String dataInicial,String dataFinal) throws PersistenciaException {
+		 
+		 double valorTotalMes = 0;	
+		 try{
+				Connection connection = ConexaoUtil.getInstance().getConnection();
+				
+				String sql ="select sum(valor) from atividade where data Between \" " +dataInicial+" \" and \" "+dataFinal+" \"";
+				
+				PreparedStatement statement =  connection.prepareStatement(sql);
+				ResultSet resultSet = statement.executeQuery();
+				if(resultSet.next()){
+				valorTotalMes = resultSet.getDouble("sum(valor)");
+				}
+				
+				connection.close();
+			}catch(Exception e){
+				e.printStackTrace();
+				throw new PersistenciaException(e.getMessage(), e);
+			}
+			return valorTotalMes;
 	}
 
 }

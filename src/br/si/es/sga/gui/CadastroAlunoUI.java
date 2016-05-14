@@ -3,8 +3,15 @@ package br.si.es.sga.gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -13,7 +20,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -40,6 +49,7 @@ import javax.swing.ButtonGroup;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.ListSelectionModel;
 
 public class CadastroAlunoUI extends JFrame {
@@ -60,6 +70,10 @@ public class CadastroAlunoUI extends JFrame {
 	private JTable table;
 	private final ButtonGroup buttonGroupSexoCadastrar = new ButtonGroup();
 	private ArrayList<Integer> idsAlunos= new ArrayList<Integer>(); 
+	private JTextField textFieldCPF;
+	JLabel lblFoto;
+	JLabel lblFotoEditar;
+	String caminhoArquivo;
 
 	/**
 	 * Launch the application.
@@ -137,7 +151,10 @@ public class CadastroAlunoUI extends JFrame {
 		PanelEditarAluno.add(scrollPane);
 		
 		table = new JTable();
-		
+		table.setCellSelectionEnabled(true);
+		table.setRowHeight(30);
+
+		 
 		JButton btnEditarAlunoEditar = new JButton("Editar Aluno");
 		btnEditarAlunoEditar.setEnabled(false);
 		btnEditarAlunoEditar.addActionListener(new ActionListener() {
@@ -145,7 +162,7 @@ public class CadastroAlunoUI extends JFrame {
 				if(e.getSource() == btnEditarAlunoEditar){
 					int idAluno = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
 					OperacaoEditarAlunoUI editaralunooperacao = new OperacaoEditarAlunoUI();
-					editaralunooperacao.editar(idAluno);
+					editaralunooperacao.editar(idAluno);			// passa o aluno que vai ser manipulador
 					editaralunooperacao.setVisible(true);
 					
 				}
@@ -154,18 +171,21 @@ public class CadastroAlunoUI extends JFrame {
 		btnEditarAlunoEditar.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnEditarAlunoEditar.setBounds(493, 566, 206, 32);
 		PanelEditarAluno.add(btnEditarAlunoEditar);
-		
-		table.setCellSelectionEnabled(true);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 					if(table.getSelectedRow() >= 0 ){
 						btnEditarAlunoEditar.setEnabled(true);	
+						preencherFotoAluno();
 					}
 			}
 		});
 		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		scrollPane.setViewportView(table);
+		
+		lblFotoEditar = new JLabel("");
+		lblFotoEditar.setBounds(939, 169, 230, 268);
+		PanelEditarAluno.add(lblFotoEditar);
 		
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -306,6 +326,14 @@ public class CadastroAlunoUI extends JFrame {
 		textFieldDataDeNasc.setColumns(10);
 		textFieldDataDeNasc.setBounds(550, 469, 162, 26);
 		PanelCadastrarAluno.add(textFieldDataDeNasc);
+	
+		textFieldCPF = new JTextField();
+		textFieldCPF.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		textFieldCPF.setColumns(10);
+		textFieldCPF.setBounds(410, 118, 166, 26);
+		PanelCadastrarAluno.add(textFieldCPF);
+		this.setLocationRelativeTo(null);
+		
 		
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.addActionListener(new ActionListener() {
@@ -315,6 +343,14 @@ public class CadastroAlunoUI extends JFrame {
 				EnderecoDTO enderecoDTO = new EnderecoDTO();
 				
 				try {
+				
+				File img = new File(caminhoArquivo);
+				byte[] foto = new byte[(int)img.length()];
+				//System.out.println("Lendo " + img.length() + " bytes");
+				
+				java.io.DataInputStream is = new java.io.DataInputStream(new FileInputStream(caminhoArquivo));
+				is.readFully(foto);
+				is.close();
 				
 					
 				enderecoDTO.setBairro(textFieldBairro.getText());
@@ -333,6 +369,8 @@ public class CadastroAlunoUI extends JFrame {
 				alunoDTO.setTelefoneAluno(textFieldTelefone.getText());
 				alunoDTO.setIdEndereco(enderecoDTO);
 				alunoDTO.setSexo(sexo.toUpperCase());
+				alunoDTO.setCpfAluno(textFieldCPF.getText().equals("") ? null : Long.parseLong((textFieldCPF.getText())));
+				alunoDTO.setFoto(foto);
 				
 				alunoLogic.cadastrar(alunoDTO);
 				MessageUtil.addMsg(CadastroAlunoUI.this, "Cadastrado com sucesso");
@@ -345,6 +383,12 @@ public class CadastroAlunoUI extends JFrame {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -370,6 +414,7 @@ public class CadastroAlunoUI extends JFrame {
 				textFieldNome.setText("");;
 				textFieldDataDeNasc.setText("");
 				textFieldTelefone.setText("");
+				textFieldCPF.setText("");
 				rdbtnM.setSelected(true);
 				
 				
@@ -383,21 +428,35 @@ public class CadastroAlunoUI extends JFrame {
 		JButton btnTirarFoto = new JButton("Tirar foto");
 		btnTirarFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				procuraArquivo();
 			}
 		});
 		btnTirarFoto.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnTirarFoto.setBounds(899, 359, 127, 23);
 		PanelCadastrarAluno.add(btnTirarFoto);
 		
-		JLabel lblFoto = new JLabel("Foto");
+		lblFoto = new JLabel("Foto");
 		lblFoto.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFoto.setBounds(852, 79, 213, 251);
 		PanelCadastrarAluno.add(lblFoto);
-		this.setLocationRelativeTo(null);
+		
+		JLabel lblCpf = new JLabel("CPF:");
+		lblCpf.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblCpf.setBounds(356, 118, 52, 25);
+		PanelCadastrarAluno.add(lblCpf);
+		
+	
 		
 		
 		//Preencher a tabela consulta
 		preencheTabelaConsulta();
+		
+
+//		table.getColumnModel().getColumn(0).setMaxWidth(0);
+//		table.getColumnModel().getColumn(0).setMinWidth(0);
+//		table.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(0);
+//		table.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
+//		
 		}
 	
 	public void preencheTabelaConsulta(){
@@ -405,6 +464,7 @@ public class CadastroAlunoUI extends JFrame {
 			String nome = textFieldNomeConsulta.getText();
 			
 			AlunoLogic alunoLogic = new AlunoLogic();
+			
 			try {
 				String [][] lista = alunoLogic.Listagem(idsAlunos);
 				table.setModel(new DefaultTableModel(
@@ -412,7 +472,21 @@ public class CadastroAlunoUI extends JFrame {
 						new String[] {
 								"Número de Identificação","Nome"
 						}
-						));
+
+						){
+					/**
+							 * 
+							 */
+							private static final long serialVersionUID = 1L;
+
+					@SuppressWarnings("unused")
+					public boolean isCellEditable(int linha, int coluna){
+						return false;
+					}
+					
+					
+				});
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				MessageUtil.addMsg(CadastroAlunoUI.this, e.getMessage());
@@ -427,19 +501,74 @@ public class CadastroAlunoUI extends JFrame {
 						lista,
 						new String[] {
 								"Número de Identificação","Nome"
+								
 						}
-						));
+						){
+					/**
+							 * 
+							 */
+							private static final long serialVersionUID = 1L;
+
+					@SuppressWarnings("unused")
+					public boolean isCellEditable(int linha, int coluna){
+						return false;
+					}
+				});
+				
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				MessageUtil.addMsg(CadastroAlunoUI.this, e.getMessage());
 			}
 		}
 		
+		table.getColumnModel().getColumn(0).setMaxWidth(0);
+		table.getColumnModel().getColumn(0).setMinWidth(0);
+		table.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(0);
+		table.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
+		
 	}
 	public void atualizar(){
 		CadastroAlunoUI.this.dispose();
 		//main(null);
 	}
-	
+
+	public void procuraArquivo(){
+		String diretorioBase = System.getProperty("uder.home") + "/desktop";
+		File dir = new File(diretorioBase);
+		JFileChooser choose =  new JFileChooser();
+		choose.setCurrentDirectory(dir);
+		choose.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		caminhoArquivo = "";
+		int retorno = choose.showOpenDialog(null);
+		if(retorno == JFileChooser.APPROVE_OPTION ){
+			caminhoArquivo = choose.getSelectedFile().getAbsolutePath();
+			//txfArquivo.setText(caminhoArquivo);
+		}
+		ImageIcon icon = new ImageIcon(caminhoArquivo);
+		ImageIcon imgOff = new ImageIcon(icon.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
+		lblFoto.setIcon(imgOff);
 	}
+	
+	public void preencherFotoAluno(){
+		int idAluno = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
+		AlunoDTO alunoDTO = new AlunoDTO();
+		AlunoLogic alunoLogic = new AlunoLogic();
+		
+		 try {
+			alunoDTO = alunoLogic.getAluno(idAluno);
+			
+			byte[] bimg;
+			bimg = alunoDTO.getFoto();
+			InputStream is = new ByteArrayInputStream(bimg);
+			Image img = new ImageIcon(bimg).getImage();
+			ImageIcon imgIcon = new ImageIcon(img);
+			ImageIcon imgOff = new ImageIcon(imgIcon.getImage().getScaledInstance(lblFotoEditar.getWidth(), lblFotoEditar.getHeight(), Image.SCALE_DEFAULT));
+			lblFotoEditar.setIcon(imgOff);
+		} catch (LogicException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}
 

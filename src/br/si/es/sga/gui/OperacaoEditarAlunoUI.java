@@ -3,12 +3,16 @@ package br.si.es.sga.gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -47,6 +51,8 @@ public class OperacaoEditarAlunoUI extends JFrame {
 	JRadioButton rdbtnMEditarAluno;
 	JRadioButton rdbtnFEditarAluno;
 	private int idAlunoAtual;
+	private JTextField textFieldCPF;
+	JLabel lblFotoEditarAluno;
 	/**
 	 * Launch the application.
 	 */
@@ -246,6 +252,7 @@ public class OperacaoEditarAlunoUI extends JFrame {
 				alunoDTO.setDataNasc( dateFormtUI.parse(textFieldDataDeNascEditarAluno.getText()));
 				alunoDTO.setDataMatricula(( new java.util.Date()));
 				alunoDTO.setTelefoneAluno(textFieldTelefoneEditarAluno.getText());
+				alunoDTO.setCpfAluno(Long.parseLong((textFieldCPF.getText())));
 				alunoDTO.setIdEndereco(enderecoDTO);
 				alunoDTO.setSexo(sexo.toUpperCase());
 				
@@ -295,10 +302,21 @@ public class OperacaoEditarAlunoUI extends JFrame {
 		btnTirarFotoEditarAluno.setBounds(899, 359, 127, 23);
 		contentPane.add(btnTirarFotoEditarAluno);
 		
-		JLabel lblFotoEditarAluno = new JLabel("Foto");
+		lblFotoEditarAluno = new JLabel("Foto");
 		lblFotoEditarAluno.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFotoEditarAluno.setBounds(852, 79, 213, 251);
 		contentPane.add(lblFotoEditarAluno);
+		
+		JLabel lblCpf = new JLabel("CPF:");
+		lblCpf.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblCpf.setBounds(353, 118, 52, 25);
+		contentPane.add(lblCpf);
+		
+		textFieldCPF = new JTextField();
+		textFieldCPF.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		textFieldCPF.setColumns(10);
+		textFieldCPF.setBounds(408, 117, 168, 26);
+		contentPane.add(textFieldCPF);
 		this.setLocationRelativeTo(null);
 	}
 	public void populationAlunoEditar(AlunoDTO alunoDTO){
@@ -310,6 +328,14 @@ public class OperacaoEditarAlunoUI extends JFrame {
 		//this.textFieldDataDeNascEditarAluno.setValue(((alunoDTO.getDataNasc())));
 		this.textFieldDataDeNascEditarAluno.setText((dateFormtUI.format(alunoDTO.getDataNasc())));
 		this.textFieldTelefoneEditarAluno.setText((alunoDTO.getTelefoneAluno()));
+		this.textFieldCPF.setText(String.valueOf(alunoDTO.getCpfAluno()));
+		byte[] bimg;
+		bimg = alunoDTO.getFoto();
+		InputStream is = new ByteArrayInputStream(bimg);
+		Image img = new ImageIcon(bimg).getImage();
+		ImageIcon imgIcon = new ImageIcon(img);
+		ImageIcon imgOff = new ImageIcon(imgIcon.getImage().getScaledInstance(lblFotoEditarAluno.getWidth(), lblFotoEditarAluno.getHeight(), Image.SCALE_DEFAULT));
+		lblFotoEditarAluno.setIcon(imgOff);
 		
 		//dados do endereço
 		this.textFieldBairroEditarAluno.setText(alunoDTO.getIdEndereco().getBairro());

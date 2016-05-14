@@ -28,6 +28,14 @@ public class AlunoLogic {
 			throw  new LogicException(e.getMessage());
 		}
 	}
+	public void atualizarDataVencimento (AlunoDTO alunoDTO) throws LogicException{
+		try{
+		AlunoDAO alunoDAO = new AlunoDAO();
+		alunoDAO.atualizarDataVencimento(alunoDTO);
+		}catch(Exception e){
+			throw  new LogicException(e.getMessage());
+		}
+	}
 	public String [][] Listagem(List<Integer> idsPessoas) throws LogicException{
 		int numCols = 2;
 		String [][]listaRetorno = null;

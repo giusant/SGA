@@ -190,7 +190,7 @@ public class CadastroModalidadeUI extends JFrame {
 				ModalidadeDTO modalidadeDTO = new ModalidadeDTO();
 				ModalidadeLogic modalidadeLogic = new ModalidadeLogic();
 				try {
-					modalidadeDTO.setIdModalidade(recuperarIDCamposEditar());
+					modalidadeDTO.setIdModalidade(recuperarIDCamposExcluir());
 					modalidadeLogic.removerModalidade(modalidadeDTO.getIdModalidade());
 					JOptionPane.showMessageDialog(CadastroModalidadeUI.this,"Sucesso!");
 					CadastroModalidadeUI.this.dispose();

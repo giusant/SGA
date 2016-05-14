@@ -1,6 +1,7 @@
 package br.si.es.sga.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -19,10 +20,11 @@ public class CaixaDAO implements GenericDAO<CaixaDTO> {
 			
 			Connection connection =  ConexaoUtil.getInstance().getConnection();
 			
-			String sql ="INSERT INTO CAIXA(valorDiario, valorTotal )" + " VALUES(?,?)";
+			String sql ="INSERT INTO CAIXA(valorDiario, valorTotal, data )" + " VALUES(?,?,?)";
 			PreparedStatement Statement = connection.prepareStatement(sql);
 			Statement.setDouble(1, caixaDTO.getValorDiario());
 			Statement.setDouble(2, caixaDTO.getValorTotal());
+			Statement.setDate(3, new Date(caixaDTO.getData().getTime()));
 			
 			
 			Statement.execute();
@@ -39,13 +41,15 @@ public class CaixaDAO implements GenericDAO<CaixaDTO> {
 
 			Connection connection =  ConexaoUtil.getInstance().getConnection();
 
-			String sql =  "UPDATE CAIXA " + "SET valorDiario =?," + "valorTotal =?,"
+			String sql =  "UPDATE CAIXA " + "SET valorDiario =?," + "valorTotal =?," + " data = ? "
 					 +
 					"WHERE idCaixa = ? ";
 			
 			PreparedStatement Statement = connection.prepareStatement(sql);
 			Statement.setDouble(1, caixaDTO.getValorDiario());
 			Statement.setDouble(2, caixaDTO.getValorTotal());
+			Statement.setDate(3, new Date (caixaDTO.getData().getTime()));
+			Statement.setInt(4, caixaDTO.getIdCaixa());
 
 			Statement.execute();
 			connection.close();
@@ -57,6 +61,20 @@ public class CaixaDAO implements GenericDAO<CaixaDTO> {
 
 	@Override
 	public void deletar(Integer id) throws PersistenciaException {
+		try{
+			Connection connection = ConexaoUtil.getInstance().getConnection();
+			String sql = "DELETE FROM CAIXA";
+			
+			PreparedStatement Statement = connection.prepareStatement(sql);
+			Statement.execute();
+			connection.close();
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new PersistenciaException(e.getMessage(),e);
+		}
+		
+	}
+	public void deletar() throws PersistenciaException {
 		try{
 			Connection connection = ConexaoUtil.getInstance().getConnection();
 			String sql = "DELETE FROM CAIXA";
@@ -87,7 +105,7 @@ public class CaixaDAO implements GenericDAO<CaixaDTO> {
 				 caixaDTO.setIdCaixa(resultSet.getInt("idCaixa"));
 				 caixaDTO.setValorDiario(resultSet.getDouble("valorDiario"));
 				 caixaDTO.setValorTotal(resultSet.getDouble("valorTotal"));
-				
+				 caixaDTO.setData(resultSet.getDate("data"));
 				 listaCaixas.add(caixaDTO);
 			 }
 			 connection.close();
@@ -115,7 +133,7 @@ public class CaixaDAO implements GenericDAO<CaixaDTO> {
 				caixaDTO.setIdCaixa(resultSet.getInt("idCaixa"));
 				caixaDTO.setValorDiario(resultSet.getDouble("valorDiario"));
 				caixaDTO.setValorTotal(resultSet.getDouble("valor"));
-
+				caixaDTO.setData(resultSet.getDate("data"));
 			}
 			connection.close();
 		}catch(Exception e){

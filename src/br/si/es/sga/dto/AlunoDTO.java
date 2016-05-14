@@ -1,9 +1,6 @@
 package br.si.es.sga.dto;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+
 import java.util.Date;
 
 
@@ -19,6 +16,7 @@ public class AlunoDTO {
 	private EnderecoDTO idEndereco;
 	private byte[] foto;
 	private String sexo;
+	private long cpfAluno;
 	
 	//private DateFormat dateFormtBD = new SimpleDateFormat("YYYY/MM/DD");
 	
@@ -90,6 +88,12 @@ public class AlunoDTO {
 	}
 	public void setSexo(String sexo) {
 		this.sexo = sexo;
+	}
+	public long getCpfAluno() {
+		return cpfAluno;
+	}
+	public void setCpfAluno(long cpfAluno) {
+		this.cpfAluno = cpfAluno;
 	}
 	
 }
