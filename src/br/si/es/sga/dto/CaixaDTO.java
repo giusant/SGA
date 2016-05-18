@@ -6,6 +6,7 @@ public class CaixaDTO {
 	private int idCaixa;
 	private double valorDiario;
 	private double valorTotal;
+	private double valorSaida;
 	private Date data;
 	
 	public int getIdCaixa() {
@@ -31,5 +32,11 @@ public class CaixaDTO {
 	}
 	public void setData(Date data) {
 		this.data = data;
+	}
+	public double getValorSaida() {
+		return valorSaida;
+	}
+	public void setValorSaida(double valorSaida) {
+		this.valorSaida = valorSaida;
 	}
 }

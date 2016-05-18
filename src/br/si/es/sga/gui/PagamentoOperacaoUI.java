@@ -64,6 +64,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import java.awt.Color;
 
 public class PagamentoOperacaoUI extends JFrame {
 	AlunoDTO alunoAtual;
@@ -71,7 +72,6 @@ public class PagamentoOperacaoUI extends JFrame {
 	private JTextField textFieldDescontoPagamento;
 	private JTextField txtFieldTotalPagamento;
 	private JTextField txtFieldDataPagamento;
-	JComboBox comboBoxModalidade;
 	ModalidadeLogic modalidadeLogic = new ModalidadeLogic();
 	DefaultListModel  model;
 	private JTable tableModalidadesExistente;
@@ -107,14 +107,10 @@ public class PagamentoOperacaoUI extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(224, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel lblModalidadesPagamento = new JLabel("Modalidade:");
-		lblModalidadesPagamento.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblModalidadesPagamento.setBounds(32, 45, 141, 24);
-		contentPane.add(lblModalidadesPagamento);
 		
 		
 		
@@ -214,6 +210,11 @@ public class PagamentoOperacaoUI extends JFrame {
 		contentPane.add(txtFieldDataPagamento);
 		
 		JButton btnCancelarPagamento = new JButton("Cancelar");
+		btnCancelarPagamento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PagamentoOperacaoUI.this.dispose();
+			}
+		});
 		btnCancelarPagamento.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnCancelarPagamento.setBounds(543, 362, 127, 31);
 		contentPane.add(btnCancelarPagamento);
@@ -236,6 +237,8 @@ public class PagamentoOperacaoUI extends JFrame {
 					atividadeLogic.cadastrar(atividadeDTO);
 					atualizarAluno(alunoAtual);
 					atualizarCaixa();
+					MessageUtil.addMsg(PagamentoOperacaoUI.this, "Salvo com Sucesso!");
+					PagamentoOperacaoUI.this.dispose();
 				} catch (LogicException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -263,20 +266,6 @@ public class PagamentoOperacaoUI extends JFrame {
 		this.setSize(800, 500);		//tamanho da tela
 		this.setLocationRelativeTo(null);	//situa a tela no centro
 
-		// codigo que converte o atributo para uma combobox cadastrar
-		try{
-
-			ComboBoxModel comboModalidadeModel;
-			comboModalidadeModel = new DefaultComboBoxModel(converteModalidade(modalidadeLogic.listarModalidade()));
-			comboBoxModalidade = new JComboBox();
-			comboBoxModalidade.setModel(comboModalidadeModel);
-		}catch(LogicException e){
-			e.printStackTrace();
-			//MessagensUtil.addMsg(MainFrame.this, e.getMessage());
-		}
-		comboBoxModalidade.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		comboBoxModalidade.setBounds(183, 45, 427, 25);
-		contentPane.add(comboBoxModalidade);
 
 		model = new DefaultListModel<>();
 		
@@ -299,15 +288,7 @@ public class PagamentoOperacaoUI extends JFrame {
 		popularCampos();
 		
 	}
-	public String[] converteModalidade(List<ModalidadeDTO> listarModalidade) {
-		String[] result = new String[listarModalidade.size()];
-		for(int i = 0; i < listarModalidade.size();i++){
-			ModalidadeDTO modalidadeDTO = listarModalidade.get(i);
-			result[i] =  modalidadeDTO.getNomeModalidade();
 
-		}
-		return result;
-	}
 	
 	public void preencheTabelaConsulta(){
 
@@ -516,6 +497,9 @@ public class PagamentoOperacaoUI extends JFrame {
 			}else{
 				caixaLogic.cadastrar(caixaDTO);
 			}
+			TelaPrincipalUI.lblValorTotal.setText(String.valueOf(valorTotalMes));
+			TelaPrincipalUI.lblValorDiario.setText(String.valueOf(valorDiario));
+						
 			 
 		} catch (LogicException e) {
 			// TODO Auto-generated catch block

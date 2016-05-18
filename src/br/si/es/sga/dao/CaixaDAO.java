@@ -20,11 +20,12 @@ public class CaixaDAO implements GenericDAO<CaixaDTO> {
 			
 			Connection connection =  ConexaoUtil.getInstance().getConnection();
 			
-			String sql ="INSERT INTO CAIXA(valorDiario, valorTotal, data )" + " VALUES(?,?,?)";
+			String sql ="INSERT INTO CAIXA(valorDiario, valorTotal, data, valorSaida )" + " VALUES(?,?,?,?)";
 			PreparedStatement Statement = connection.prepareStatement(sql);
 			Statement.setDouble(1, caixaDTO.getValorDiario());
 			Statement.setDouble(2, caixaDTO.getValorTotal());
 			Statement.setDate(3, new Date(caixaDTO.getData().getTime()));
+			Statement.setDouble(4, caixaDTO.getValorSaida());
 			
 			
 			Statement.execute();
@@ -41,15 +42,15 @@ public class CaixaDAO implements GenericDAO<CaixaDTO> {
 
 			Connection connection =  ConexaoUtil.getInstance().getConnection();
 
-			String sql =  "UPDATE CAIXA " + "SET valorDiario =?," + "valorTotal =?," + " data = ? "
-					 +
-					"WHERE idCaixa = ? ";
+			String sql =  "UPDATE CAIXA " + "SET valorDiario =?," + "valorTotal =?," + " data = ?, " + " valorSaida = ? "+
+					"WHERE idCaixa = ? ;";
 			
 			PreparedStatement Statement = connection.prepareStatement(sql);
 			Statement.setDouble(1, caixaDTO.getValorDiario());
 			Statement.setDouble(2, caixaDTO.getValorTotal());
 			Statement.setDate(3, new Date (caixaDTO.getData().getTime()));
-			Statement.setInt(4, caixaDTO.getIdCaixa());
+			Statement.setDouble(4, caixaDTO.getValorSaida());
+			Statement.setInt(5, caixaDTO.getIdCaixa());
 
 			Statement.execute();
 			connection.close();
@@ -106,6 +107,7 @@ public class CaixaDAO implements GenericDAO<CaixaDTO> {
 				 caixaDTO.setValorDiario(resultSet.getDouble("valorDiario"));
 				 caixaDTO.setValorTotal(resultSet.getDouble("valorTotal"));
 				 caixaDTO.setData(resultSet.getDate("data"));
+				 caixaDTO.setValorSaida(resultSet.getDouble("valorSaida"));
 				 listaCaixas.add(caixaDTO);
 			 }
 			 connection.close();
@@ -134,6 +136,7 @@ public class CaixaDAO implements GenericDAO<CaixaDTO> {
 				caixaDTO.setValorDiario(resultSet.getDouble("valorDiario"));
 				caixaDTO.setValorTotal(resultSet.getDouble("valor"));
 				caixaDTO.setData(resultSet.getDate("data"));
+				caixaDTO.setValorSaida(resultSet.getDouble("valorSaida"));
 			}
 			connection.close();
 		}catch(Exception e){

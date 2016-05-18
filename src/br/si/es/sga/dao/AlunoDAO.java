@@ -82,6 +82,34 @@ public class AlunoDAO implements GenericDAO<AlunoDTO> {
 			Connection connection =  ConexaoUtil.getInstance().getConnection();
 			
 			String sql =  "UPDATE ALUNO " + "SET nomeAluno =?," + "telefoneAluno =?," 
+			 + "sexo = ?, " +"dataNasc = ?, " + " cpfAluno = ?, " +"foto = ? "+ 
+			" WHERE idAluno =?";
+			
+			PreparedStatement Statement = connection.prepareStatement(sql);
+			Statement.setString(1, alunoDTO.getNomeAluno());
+			Statement.setString(2, alunoDTO.getTelefoneAluno());
+			Statement.setString(3, alunoDTO.getSexo());
+			Statement.setDate(4, new Date( alunoDTO.getDataNasc().getTime()));
+			Statement.setLong(5, alunoDTO.getCpfAluno());
+			Statement.setObject(6, alunoDTO.getFoto());
+			Statement.setInt(7, alunoDTO.getIdAluno());
+			
+				
+			Statement.execute();
+			connection.close();
+			// atualiza agr o relacionamento endereço pessoa 
+			enderecoDAO.atualizar(alunoDTO.getIdEndereco());
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new PersistenciaException(e.getMessage(), e);
+		}
+		
+	}
+	public void atualizarSemFoto(AlunoDTO alunoDTO) throws PersistenciaException {
+		try{
+			Connection connection =  ConexaoUtil.getInstance().getConnection();
+			
+			String sql =  "UPDATE ALUNO " + "SET nomeAluno =?," + "telefoneAluno =?," 
 			 + "sexo = ?, " +"dataNasc = ?, " + " cpfAluno = ? " + 
 			" WHERE idAluno =?";
 			
@@ -102,8 +130,42 @@ public class AlunoDAO implements GenericDAO<AlunoDTO> {
 			e.printStackTrace();
 			throw new PersistenciaException(e.getMessage(), e);
 		}
-		
 	}
+	public List<AlunoDTO> alunosVencidos(String dataHoje) throws PersistenciaException{
+		List<AlunoDTO> listaAluno = new ArrayList<AlunoDTO>();
+		try{
+			Connection connection = ConexaoUtil.getInstance().getConnection();
+			
+			String sql = "SELECT * FROM ALUNO where dataVencimento < \""+dataHoje+"\"; ";
+			
+			 PreparedStatement statement = connection.prepareStatement(sql);
+			 ResultSet resultSet = statement.executeQuery();
+			 
+			 while(resultSet.next()){ 
+				 AlunoDTO alunoDTO = new AlunoDTO();
+				 alunoDTO.setIdAluno(resultSet.getInt("idAluno"));
+				 alunoDTO.setNomeAluno(resultSet.getString("nomeAluno"));
+				 alunoDTO.setDataNasc(resultSet.getDate("dataNasc"));
+				 alunoDTO.setDataVencimento(resultSet.getDate("dataVencimento"));
+				 alunoDTO.setFoto(resultSet.getBytes("foto"));
+				 alunoDTO.setDataMatricula(resultSet.getDate("dataMatricula"));
+				 alunoDTO.setIdEndereco(enderecoDAO.buscarPorId(resultSet.getInt("Endereco_idEndereco")));
+				 alunoDTO.setSexo(resultSet.getString("sexo"));
+				 alunoDTO.setTelefoneAluno(resultSet.getString("telefoneAluno"));
+				 alunoDTO.setCpfAluno(resultSet.getLong("cpfAluno"));
+				 
+				 listaAluno.add(alunoDTO);
+			 }
+			 connection.close();
+
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new PersistenciaException(e.getMessage(), e);
+		}
+		return listaAluno;
+	
+	}
+	
 	public void atualizarDataVencimento(AlunoDTO alunoDTO) throws PersistenciaException {
 		try{
 			Connection connection =  ConexaoUtil.getInstance().getConnection();

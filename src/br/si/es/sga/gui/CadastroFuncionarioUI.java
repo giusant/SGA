@@ -33,6 +33,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
+import java.awt.Color;
 
 public class CadastroFuncionarioUI extends JFrame {
 	UsuarioLogic usuarioLogic =  new UsuarioLogic();
@@ -112,6 +113,7 @@ public class CadastroFuncionarioUI extends JFrame {
 		this.setTitle("Funcion\u00E1rio");
 		this.setLocationRelativeTo(null);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(224, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
@@ -119,9 +121,11 @@ public class CadastroFuncionarioUI extends JFrame {
 	
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBackground(new Color(224, 255, 255));
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		
 		JPanel Cadastrar = new JPanel();
+		Cadastrar.setBackground(new Color(224, 255, 255));
 		tabbedPane.addTab("Cadastrar", null, Cadastrar, null);
 		Cadastrar.setLayout(null);
 		
@@ -137,12 +141,14 @@ public class CadastroFuncionarioUI extends JFrame {
 		textFieldNomeFuncionarioCadastro.setColumns(10);
 		
 		rdbtnGerenteFuncionarioCadastro = new JRadioButton("Gerente");
+		rdbtnGerenteFuncionarioCadastro.setBackground(new Color(224, 255, 255));
 		buttonGroupFuncionarioCadastrar.add(rdbtnGerenteFuncionarioCadastro);
 		rdbtnGerenteFuncionarioCadastro.setFont(new Font("Tahoma", Font.BOLD, 20));
 		rdbtnGerenteFuncionarioCadastro.setBounds(230, 97, 109, 23);
 		Cadastrar.add(rdbtnGerenteFuncionarioCadastro);
 		
 		rdbtnFuncionrioFuncionarioCadastro = new JRadioButton("Funcion\u00E1rio");
+		rdbtnFuncionrioFuncionarioCadastro.setBackground(new Color(224, 255, 255));
 		buttonGroupFuncionarioCadastrar.add(rdbtnFuncionrioFuncionarioCadastro);
 		rdbtnFuncionrioFuncionarioCadastro.setFont(new Font("Tahoma", Font.BOLD, 20));
 		rdbtnFuncionrioFuncionarioCadastro.setBounds(350, 97, 145, 23);
@@ -264,6 +270,14 @@ public class CadastroFuncionarioUI extends JFrame {
 		passwordFieldConfirmaSenhaFuncionarioCadastro.setBounds(242, 565, 230, 25);
 		Cadastrar.add(passwordFieldConfirmaSenhaFuncionarioCadastro);
 		
+		try {
+			if(usuarioLogic.listarUsuario().isEmpty()){
+				rdbtnFuncionrioFuncionarioCadastro.setEnabled(false);
+			}
+		} catch (LogicException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		JButton btnSalvarFuncCadastrar = new JButton("Salvar");
 		btnSalvarFuncCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -272,8 +286,8 @@ public class CadastroFuncionarioUI extends JFrame {
 				EnderecoDTO enderecoDTO = new EnderecoDTO();
 				EnderecoLogic enderecoLogic = new EnderecoLogic();
 				try {
-					boolean gerente = rdbtnFuncionrioFuncionarioCadastro.isSelected() ? false : true;
-					
+					boolean gerente = rdbtnFuncionrioFuncionarioCadastro.isSelected() ? false : true;						
+
 					enderecoDTO.setBairro(textFieldBairroFuncionarioCadastro.getText());
 					enderecoDTO.setCidade(textFieldCidadeFuncionarioCadastro.getText());
 					enderecoDTO.setRua(textFieldRuaFuncionarioCadastro.getText());
@@ -281,7 +295,7 @@ public class CadastroFuncionarioUI extends JFrame {
 					enderecoDTO.setComplemento(txtFieldComplementoFuncionarioCadastro.getText());
 					enderecoDTO.setNumero(Integer.parseInt(textFieldNFuncionarioCadastro.getText()));
 					enderecoDTO.setEstado(textFieldEstadoFuncionarioCadastro.getText());
-					
+
 					//int idEndereco =  enderecoLogic.cadastrar(enderecoDTO);
 
 			
@@ -299,7 +313,7 @@ public class CadastroFuncionarioUI extends JFrame {
 						passwordFieldSenhaFuncionarioCadastro.setText("");
 					}else{
 						usuarioLogic.cadastrar(usuarioDTO);
-						JOptionPane.showMessageDialog(CadastroFuncionarioUI.this,"Sucesso!");
+						MessageUtil.addMsg(CadastroFuncionarioUI.this, "Salvo com Sucesso!");
 						CadastroFuncionarioUI.this.dispose();
 						main(null);
 					}
@@ -317,7 +331,7 @@ public class CadastroFuncionarioUI extends JFrame {
 		btnSalvarFuncCadastrar.setBounds(536, 559, 111, 31);
 		Cadastrar.add(btnSalvarFuncCadastrar);
 		
-		JButton btnCancelarFuncCadastrar = new JButton("limpar");
+		JButton btnCancelarFuncCadastrar = new JButton("Limpar");
 		btnCancelarFuncCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//dados do usuario
@@ -378,6 +392,7 @@ public class CadastroFuncionarioUI extends JFrame {
 		Cadastrar.add(textFieldCPF);
 		
 		JPanel Editar = new JPanel();
+		Editar.setBackground(new Color(224, 255, 255));
 		tabbedPane.addTab("Editar", null, Editar, null);
 		Editar.setLayout(null);
 		
@@ -392,12 +407,14 @@ public class CadastroFuncionarioUI extends JFrame {
 		Editar.add(lblTipoDeUsuarioFuncionarioEditar);
 		
 		radioButtonGerenteFuncionarioEditar = new JRadioButton("Gerente");
+		radioButtonGerenteFuncionarioEditar.setBackground(new Color(224, 255, 255));
 		buttonGroupFuncionarioEditar.add(radioButtonGerenteFuncionarioEditar);
 		radioButtonGerenteFuncionarioEditar.setFont(new Font("Tahoma", Font.BOLD, 20));
 		radioButtonGerenteFuncionarioEditar.setBounds(252, 158, 109, 23);
 		Editar.add(radioButtonGerenteFuncionarioEditar);
 		
 		rbtnFuncionarioFuncionarioEditar = new JRadioButton("Funcion\u00E1rio");
+		rbtnFuncionarioFuncionarioEditar.setBackground(new Color(224, 255, 255));
 		buttonGroupFuncionarioEditar.add(rbtnFuncionarioFuncionarioEditar);
 		rbtnFuncionarioFuncionarioEditar.setFont(new Font("Tahoma", Font.BOLD, 20));
 		rbtnFuncionarioFuncionarioEditar.setBounds(414, 158, 145, 23);
@@ -529,8 +546,9 @@ public class CadastroFuncionarioUI extends JFrame {
 				UsuarioLogic usuarioLogic = new UsuarioLogic();
 				EnderecoDTO enderecoDTO = new EnderecoDTO();
 				EnderecoLogic enderecoLogic = new EnderecoLogic();
+				boolean gerente ;
 				try {
-					boolean gerente = rbtnFuncionarioFuncionarioEditar.isSelected() ? false : true;
+					gerente = rbtnFuncionarioFuncionarioEditar.isSelected() ? false : true;						
 					
 					enderecoDTO.setBairro(txtFieldBairroFuncionarioEditar.getText());
 					enderecoDTO.setCidade(txtFieldCidadeFuncionarioEditar.getText());
@@ -560,7 +578,7 @@ public class CadastroFuncionarioUI extends JFrame {
 						passwordFieldSenhaFuncEditar.setText("");
 					}else{
 						usuarioLogic.atualizar(usuarioDTO);
-						JOptionPane.showMessageDialog(CadastroFuncionarioUI.this,"Sucesso!");
+						JOptionPane.showMessageDialog(CadastroFuncionarioUI.this,"Salvo com Sucesso!");
 
 						CadastroFuncionarioUI.this.dispose();
 						main(null);
@@ -639,6 +657,7 @@ public class CadastroFuncionarioUI extends JFrame {
 		Editar.add(textFieldTelefoneFuncEditar);
 
 		JPanel Excluir = new JPanel();
+		Excluir.setBackground(new Color(224, 255, 255));
 		tabbedPane.addTab("Excluir", null, Excluir, null);
 		Excluir.setLayout(null);
 		
@@ -665,6 +684,7 @@ public class CadastroFuncionarioUI extends JFrame {
 		Excluir.add(txtFieldFuncExcluir);
 		
 		rbtnGerenteFuncExcluir = new JRadioButton("Gerente");
+		rbtnGerenteFuncExcluir.setBackground(new Color(224, 255, 255));
 		rbtnGerenteFuncExcluir.setEnabled(false);
 		buttonGroupFuncionarioExcluir.add(rbtnGerenteFuncExcluir);
 		rbtnGerenteFuncExcluir.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -672,6 +692,7 @@ public class CadastroFuncionarioUI extends JFrame {
 		Excluir.add(rbtnGerenteFuncExcluir);
 		
 		rbtnFuncFuncExcluir = new JRadioButton("Funcion\u00E1rio");
+		rbtnFuncFuncExcluir.setBackground(new Color(224, 255, 255));
 		rbtnFuncFuncExcluir.setEnabled(false);
 		buttonGroupFuncionarioExcluir.add(rbtnFuncFuncExcluir);
 		rbtnFuncFuncExcluir.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -817,7 +838,7 @@ public class CadastroFuncionarioUI extends JFrame {
 					//usuarioDTO.setLogin(recuperarIDCamposExcluir());
 					 usuarioDTO = usuarioLogic.getUsuarioPorLogin(recuperarIDCamposExcluir());
 					usuarioLogic.removerUsuario(usuarioDTO.getLogin(), usuarioDTO.getEndereco().getIdEndereco());
-					JOptionPane.showMessageDialog(CadastroFuncionarioUI.this,"Sucesso!");
+					MessageUtil.addMsg(CadastroFuncionarioUI.this, "Excluído com Sucesso!");
 					CadastroFuncionarioUI.this.dispose();
 					main(null);
 				} catch (LogicException e2) {

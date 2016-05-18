@@ -25,10 +25,12 @@ import javax.swing.JTable;
 import br.si.es.sga.dto.ModalidadeDTO;
 import br.si.es.sga.exeception.LogicException;
 import br.si.es.sga.logic.ModalidadeLogic;
+import br.si.es.sga.util.MessageUtil;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.List;
+import javax.swing.border.LineBorder;
 
 public class CadastroModalidadeUI extends JFrame {
 	ModalidadeLogic modalidadeLogic = new ModalidadeLogic();
@@ -72,6 +74,7 @@ public class CadastroModalidadeUI extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(224, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		this.setSize(800, 500);		//tamanho da tela
@@ -81,17 +84,21 @@ public class CadastroModalidadeUI extends JFrame {
 		
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBackground(new Color(224, 255, 255));
 		tabbedPane.setBounds(5, 5, 784, 461);
 		contentPane.add(tabbedPane);
 		
 		JPanel BtnSalvarCadastrar = new JPanel();
+		BtnSalvarCadastrar.setBackground(new Color(224, 255, 255));
 		tabbedPane.addTab("Cadastrar", null, BtnSalvarCadastrar, null);
 		
 		JPanel Editar = new JPanel();
+		Editar.setBackground(new Color(224, 255, 255));
 		tabbedPane.addTab("Editar", null, Editar, null);
 		Editar.setLayout(null);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(224, 255, 255));
 		panel.setLayout(null);
 		panel.setBounds(0, 0, 779, 433);
 		Editar.add(panel);
@@ -137,6 +144,9 @@ public class CadastroModalidadeUI extends JFrame {
 		panel.add(lblDescricaoEditar);
 		
 		textAreaDescricaoEditar = new JTextArea();
+		textAreaDescricaoEditar.setBorder(new LineBorder(new Color(0, 0, 0)));
+		textAreaDescricaoEditar.setForeground(new Color(0, 0, 128));
+		textAreaDescricaoEditar.setLineWrap(true);
 		textAreaDescricaoEditar.setFont(new Font("Monospaced", Font.PLAIN, 16));
 		textAreaDescricaoEditar.setBackground(Color.WHITE);
 		textAreaDescricaoEditar.setBounds(150, 277, 300, 145);
@@ -153,7 +163,7 @@ public class CadastroModalidadeUI extends JFrame {
 					modalidadeDTO.setValor(Double.parseDouble(textFieldValorEditar.getText()));
 					modalidadeDTO.setDescrição(textAreaDescricaoEditar.getText());
 					modalidadeLogic.ataulizar(modalidadeDTO);
-					JOptionPane.showMessageDialog(CadastroModalidadeUI.this,"Sucesso!");
+					MessageUtil.addMsg(CadastroModalidadeUI.this, "Salvo com Sucesso!");
 					CadastroModalidadeUI.this.dispose();
 					main(null);
 				} catch (LogicException e) {
@@ -164,7 +174,7 @@ public class CadastroModalidadeUI extends JFrame {
 			}
 		});
 		btnSalvarModalidadeEditar.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnSalvarModalidadeEditar.setBounds(501, 302, 127, 31);
+		btnSalvarModalidadeEditar.setBounds(501, 316, 127, 31);
 		panel.add(btnSalvarModalidadeEditar);
 		
 		JButton btnCancelarModalidadeEditar = new JButton("Limpar");
@@ -181,6 +191,7 @@ public class CadastroModalidadeUI extends JFrame {
 		panel.add(btnCancelarModalidadeEditar);
 		
 		JPanel Excluir = new JPanel();
+		Excluir.setBackground(new Color(224, 255, 255));
 		tabbedPane.addTab("Excluir", null, Excluir, null);
 		Excluir.setLayout(null);
 		
@@ -192,7 +203,7 @@ public class CadastroModalidadeUI extends JFrame {
 				try {
 					modalidadeDTO.setIdModalidade(recuperarIDCamposExcluir());
 					modalidadeLogic.removerModalidade(modalidadeDTO.getIdModalidade());
-					JOptionPane.showMessageDialog(CadastroModalidadeUI.this,"Sucesso!");
+					MessageUtil.addMsg(CadastroModalidadeUI.this, "Excluído com Sucesso!");
 					CadastroModalidadeUI.this.dispose();
 					main(null);
 				} catch (LogicException e2) {
@@ -242,6 +253,7 @@ public class CadastroModalidadeUI extends JFrame {
 		Excluir.add(textFieldValorExcluir);
 		
 		textAreaDescricaoExcluir = new JTextArea();
+		textAreaDescricaoExcluir.setBorder(new LineBorder(new Color(0, 0, 0)));
 		textAreaDescricaoExcluir.setEnabled(false);
 		textAreaDescricaoExcluir.setFont(new Font("Monospaced", Font.PLAIN, 16));
 		textAreaDescricaoExcluir.setBackground(Color.WHITE);
@@ -264,9 +276,9 @@ public class CadastroModalidadeUI extends JFrame {
 		btnSelecionarExcluir.setBounds(566, 26, 129, 29);
 		Excluir.add(btnSelecionarExcluir);
 		
-		JLabel lblModalidadesCadastrar = new JLabel("Modalidades:");
+		JLabel lblModalidadesCadastrar = new JLabel("Modalidades existentes:");
 		lblModalidadesCadastrar.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblModalidadesCadastrar.setBounds(35, 37, 150, 25);
+		lblModalidadesCadastrar.setBounds(35, 37, 257, 25);
 		BtnSalvarCadastrar.add(lblModalidadesCadastrar);
 				
 		JSeparator separator = new JSeparator();
@@ -308,6 +320,7 @@ public class CadastroModalidadeUI extends JFrame {
 		BtnSalvarCadastrar.add(lblDescricaoCadastrar);
 		
 		JTextArea textAreaDescricaoCadastrar = new JTextArea();
+		textAreaDescricaoCadastrar.setBorder(new LineBorder(new Color(0, 0, 0)));
 		textAreaDescricaoCadastrar.setBackground(SystemColor.text);
 		textAreaDescricaoCadastrar.setFont(new Font("Monospaced", Font.PLAIN, 16));
 		textAreaDescricaoCadastrar.setBounds(150, 277, 300, 145);
@@ -325,7 +338,7 @@ public class CadastroModalidadeUI extends JFrame {
 		}
 
 		comboBoxModalidadeCadastrar.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		comboBoxModalidadeCadastrar.setBounds(178, 38, 394, 25);
+		comboBoxModalidadeCadastrar.setBounds(288, 38, 377, 25);
 		BtnSalvarCadastrar.add(comboBoxModalidadeCadastrar);
 		BtnSalvarCadastrar.setLayout(null);
 
@@ -386,7 +399,7 @@ public class CadastroModalidadeUI extends JFrame {
 					modalidadeDTO.setValor(Double.parseDouble(textFieldValorCadastrar.getText()));
 					modalidadeDTO.setDescrição(textAreaDescricaoCadastrar.getText());
 					modalidadeLogic.cadastrar(modalidadeDTO);
-					JOptionPane.showMessageDialog(CadastroModalidadeUI.this,"Sucesso!");
+					MessageUtil.addMsg(CadastroModalidadeUI.this, "Salvo com Sucesso!");
 					CadastroModalidadeUI.this.dispose();
 					main(null);
 				} catch (LogicException e) {

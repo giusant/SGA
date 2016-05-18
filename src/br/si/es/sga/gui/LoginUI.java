@@ -104,7 +104,7 @@ public class LoginUI extends JFrame {
 		}
 		
 		
-	    JButton btnConfimar = new JButton("Confimar");
+	    JButton btnConfimar = new JButton("Confirmar");
 	    
 	    btnConfimar.setMnemonic('C');
 	    btnConfimar.addActionListener(new ActionListener() {
@@ -124,7 +124,7 @@ public class LoginUI extends JFrame {
 	    					telaprincipal.setVisible(true);
 	    					textFieldLogin.setText("");
 	    					textFieldSenha.setText("");
-
+	    					dispose();
 	    				}else{
 	    					MessageUtil.addMsg(LoginUI.this, "Senha incorreta");
 	    					textFieldLogin.setText("");

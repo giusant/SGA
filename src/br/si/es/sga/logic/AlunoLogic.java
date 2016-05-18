@@ -28,6 +28,14 @@ public class AlunoLogic {
 			throw  new LogicException(e.getMessage());
 		}
 	}
+	public void atualizarSemFoto (AlunoDTO alunoDTO) throws LogicException{
+		try{
+		AlunoDAO alunoDAO = new AlunoDAO();
+		alunoDAO.atualizarSemFoto(alunoDTO);
+		}catch(Exception e){
+			throw  new LogicException(e.getMessage());
+		}
+	}
 	public void atualizarDataVencimento (AlunoDTO alunoDTO) throws LogicException{
 		try{
 		AlunoDAO alunoDAO = new AlunoDAO();
@@ -65,6 +73,17 @@ public class AlunoLogic {
 		try{
 			AlunoDAO alunoDAO = new AlunoDAO();
 			lista = alunoDAO.listarTodos(); 
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new LogicException(e.getMessage(), e);
+		}
+		return lista;
+	}
+	public List<AlunoDTO> listarAlunoVencidos(String dataHoje) throws LogicException{
+		List<AlunoDTO> lista = null;
+		try{
+			AlunoDAO alunoDAO = new AlunoDAO();
+			lista = alunoDAO.alunosVencidos(dataHoje); 
 		}catch(Exception e){
 			e.printStackTrace();
 			throw new LogicException(e.getMessage(), e);

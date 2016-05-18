@@ -179,7 +179,7 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO>{
 					 usuarioDTO.setSenha(resultSet.getString("senha"));
 					 usuarioDTO.setTelefoneUsuario(resultSet.getString("telefoneUsuario"));
 					 usuarioDTO.setEndereco(enderecoDAO.buscarPorId(resultSet.getInt("Endereco_idEndereco")));
-					 usuarioDTO.setCpfUsuario(resultSet.getInt("cpfUsuario"));
+					 usuarioDTO.setCpfUsuario(resultSet.getLong("cpfUsuario"));
 					 
 				}
 				connection.close();

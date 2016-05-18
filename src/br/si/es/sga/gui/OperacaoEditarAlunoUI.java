@@ -3,17 +3,30 @@ package br.si.es.sga.gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,6 +45,7 @@ import br.si.es.sga.logic.AlunoLogic;
 import br.si.es.sga.util.MessageUtil;
 
 import javax.swing.ButtonGroup;
+import java.awt.Color;
 
 public class OperacaoEditarAlunoUI extends JFrame {
 	private DateFormat dateFormtUI = new SimpleDateFormat("dd/MM/yyyy");
@@ -53,6 +67,7 @@ public class OperacaoEditarAlunoUI extends JFrame {
 	private int idAlunoAtual;
 	private JTextField textFieldCPF;
 	JLabel lblFotoEditarAluno;
+	String caminhoArquivo;
 	/**
 	 * Launch the application.
 	 */
@@ -77,6 +92,7 @@ public class OperacaoEditarAlunoUI extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(224, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -101,12 +117,14 @@ public class OperacaoEditarAlunoUI extends JFrame {
 		contentPane.add(lblSexoEditarAluno);
 		
 		rdbtnMEditarAluno = new JRadioButton("M");
+		rdbtnMEditarAluno.setBackground(new Color(224, 255, 255));
 		buttonGroupAlunoEditar.add(rdbtnMEditarAluno);
 		rdbtnMEditarAluno.setFont(new Font("Tahoma", Font.BOLD, 18));
 		rdbtnMEditarAluno.setBounds(159, 117, 52, 28);
 		contentPane.add(rdbtnMEditarAluno);
 		
 		rdbtnFEditarAluno = new JRadioButton("F");
+		rdbtnFEditarAluno.setBackground(new Color(224, 255, 255));
 		buttonGroupAlunoEditar.add(rdbtnFEditarAluno);
 		rdbtnFEditarAluno.setFont(new Font("Tahoma", Font.BOLD, 18));
 		rdbtnFEditarAluno.setBounds(267, 117, 52, 28);
@@ -230,10 +248,9 @@ public class OperacaoEditarAlunoUI extends JFrame {
 				AlunoDTO alunoDTO = new AlunoDTO();
 				AlunoLogic alunoLogic = new AlunoLogic();
 				EnderecoDTO enderecoDTO = new EnderecoDTO();
-				
+				byte[] foto;
 				try {
 				
-					
 				enderecoDTO.setBairro(textFieldBairroEditarAluno.getText());
 				enderecoDTO.setCidade(textFieldCidadeEditarAluno.getText());
 				enderecoDTO.setRua(textFieldRuaEditarAluno.getText());
@@ -255,16 +272,26 @@ public class OperacaoEditarAlunoUI extends JFrame {
 				alunoDTO.setCpfAluno(Long.parseLong((textFieldCPF.getText())));
 				alunoDTO.setIdEndereco(enderecoDTO);
 				alunoDTO.setSexo(sexo.toUpperCase());
+			
+				if(caminhoArquivo != null){
+					File img = new File(caminhoArquivo);
+					foto = new byte[(int)img.length()];
+					//System.out.println("Lendo " + img.length() + " bytes");
+					
+					java.io.DataInputStream is = new java.io.DataInputStream(new FileInputStream(caminhoArquivo));
+					is.readFully(foto);
+					is.close();
+					alunoDTO.setFoto(foto);
+					alunoLogic.atualizar(alunoDTO);	
+				}else{
+					
 				
-				alunoLogic.atualizar(alunoDTO);
-				MessageUtil.addMsg(OperacaoEditarAlunoUI.this, "atualização com sucesso");
+					alunoLogic.atualizarSemFoto(alunoDTO);
+				}
+				
+				
+				MessageUtil.addMsg(OperacaoEditarAlunoUI.this, "Atualização com sucesso!");
 				OperacaoEditarAlunoUI.this.dispose();
-				
-				
-				//CadastroAlunoUI ca = new CadastroAlunoUI();
-				//ca.dispose();
-				//ca.atualizar();
-				//ca.preencheTabelaConsulta();
 				
 						
 				
@@ -273,6 +300,9 @@ public class OperacaoEditarAlunoUI extends JFrame {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -293,16 +323,17 @@ public class OperacaoEditarAlunoUI extends JFrame {
 		btnCancelarEditarAluno.setBounds(379, 561, 127, 31);
 		contentPane.add(btnCancelarEditarAluno);
 		
-		JButton btnTirarFotoEditarAluno = new JButton("Tirar foto");
-		btnTirarFotoEditarAluno.addActionListener(new ActionListener() {
+		JButton btnSelecionarFotoEditarAluno = new JButton("Selecionar foto [...]");
+		btnSelecionarFotoEditarAluno.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				procuraArquivo();
 			}
 		});
-		btnTirarFotoEditarAluno.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnTirarFotoEditarAluno.setBounds(899, 359, 127, 23);
-		contentPane.add(btnTirarFotoEditarAluno);
+		btnSelecionarFotoEditarAluno.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnSelecionarFotoEditarAluno.setBounds(862, 347, 194, 31);
+		contentPane.add(btnSelecionarFotoEditarAluno);
 		
-		lblFotoEditarAluno = new JLabel("Foto");
+		lblFotoEditarAluno = new JLabel("");
 		lblFotoEditarAluno.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFotoEditarAluno.setBounds(852, 79, 213, 251);
 		contentPane.add(lblFotoEditarAluno);
@@ -359,5 +390,30 @@ public class OperacaoEditarAlunoUI extends JFrame {
 		}
 		
 	}
+	public void procuraArquivo(){
+		String diretorioBase = System.getProperty("uder.home") + "/desktop";
+		File dir = new File(diretorioBase);
+		JFileChooser choose =  new JFileChooser();
+		choose.setCurrentDirectory(dir);
+		choose.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		caminhoArquivo = "";
+		int retorno = choose.showOpenDialog(null);
+		if(retorno == JFileChooser.APPROVE_OPTION ){
+			caminhoArquivo = choose.getSelectedFile().getAbsolutePath();
+			//txfArquivo.setText(caminhoArquivo);
+		}
+//		ImageIcon icon = new ImageIcon(caminhoArquivo);
+//		ImageIcon imgOff = new ImageIcon(icon.getImage().getScaledInstance(lblFotoEditarAluno.getWidth(), lblFotoEditarAluno.getHeight(), Image.SCALE_DEFAULT));
+//		if(imgOff != null)
+//		lblFotoEditarAluno.setIcon(imgOff);
+		if(!caminhoArquivo.equals(""))
+		setLabelImage(caminhoArquivo);
+	}
+	public void setLabelImage(String caminhoArquivo){
+		ImageIcon icon = new ImageIcon(caminhoArquivo);
+		ImageIcon imgOff = new ImageIcon(icon.getImage().getScaledInstance(lblFotoEditarAluno.getWidth(), lblFotoEditarAluno.getHeight(), Image.SCALE_DEFAULT));
+		lblFotoEditarAluno.setIcon(imgOff);
+	}
+	
 
 }

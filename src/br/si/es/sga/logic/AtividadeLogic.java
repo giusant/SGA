@@ -41,6 +41,16 @@ public class AtividadeLogic {
 		}
 		return valorDiario;
 	}
+	public double valorSaida (String data) throws LogicException{
+		double valorSaida;
+		try{
+		AtividadeDAO atividadeDAO = new AtividadeDAO();
+		valorSaida = atividadeDAO.valorSaida(data);
+		}catch(Exception e){
+			throw  new LogicException(e.getMessage());
+		}
+		return valorSaida;
+	}
 	public double valorTotalMes (String dataInicial, String dataFinal) throws LogicException{
 		double valorTotalMes;
 		try{

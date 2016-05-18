@@ -51,6 +51,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ListSelectionModel;
+import java.awt.Color;
 
 public class CadastroAlunoUI extends JFrame {
 	//private DateFormat dateFormtBD = new SimpleDateFormat("YYYY/MM/DD");
@@ -101,6 +102,7 @@ public class CadastroAlunoUI extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(224, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		this.setLocationRelativeTo(null);
@@ -110,24 +112,27 @@ public class CadastroAlunoUI extends JFrame {
 	
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBackground(new Color(224, 255, 255));
 		tabbedPane.setBounds(5, 5, 1184, 661);
 		contentPane.add(tabbedPane);
 		
 		JPanel PanelCadastrarAluno = new JPanel();
+		PanelCadastrarAluno.setBackground(new Color(224, 255, 255));
 		tabbedPane.addTab("Cadastrar", null, PanelCadastrarAluno, null);
 		PanelCadastrarAluno.setLayout(null);
 		
 		JPanel PanelEditarAluno = new JPanel();
+		PanelEditarAluno.setBackground(new Color(224, 255, 255));
 		tabbedPane.addTab("Editar", null, PanelEditarAluno, null);
 		PanelEditarAluno.setLayout(null);
 		
 		JSeparator separator_2 = new JSeparator();
-		separator_2.setBounds(230, 134, 699, 2);
+		separator_2.setBounds(45, 132, 699, 2);
 		PanelEditarAluno.add(separator_2);
 		
 		JLabel lblAlunoEditar = new JLabel("Aluno:");
 		lblAlunoEditar.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblAlunoEditar.setBounds(230, 37, 88, 25);
+		lblAlunoEditar.setBounds(45, 35, 88, 25);
 		PanelEditarAluno.add(lblAlunoEditar);
 		
 		JButton btnPesquisar = new JButton("Pesquisar");
@@ -137,17 +142,17 @@ public class CadastroAlunoUI extends JFrame {
 			}
 			});
 		btnPesquisar.setFont(new Font("Dialog", Font.BOLD, 18));
-		btnPesquisar.setBounds(783, 73, 146, 32);
+		btnPesquisar.setBounds(598, 71, 146, 32);
 		PanelEditarAluno.add(btnPesquisar);
 		
 		textFieldNomeConsulta = new JTextField();
 		textFieldNomeConsulta.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		textFieldNomeConsulta.setBounds(230, 73, 541, 32);
+		textFieldNomeConsulta.setBounds(45, 71, 541, 32);
 		PanelEditarAluno.add(textFieldNomeConsulta);
 		textFieldNomeConsulta.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(230, 169, 699, 368);
+		scrollPane.setBounds(45, 167, 699, 368);
 		PanelEditarAluno.add(scrollPane);
 		
 		table = new JTable();
@@ -164,12 +169,13 @@ public class CadastroAlunoUI extends JFrame {
 					OperacaoEditarAlunoUI editaralunooperacao = new OperacaoEditarAlunoUI();
 					editaralunooperacao.editar(idAluno);			// passa o aluno que vai ser manipulador
 					editaralunooperacao.setVisible(true);
+		
 					
 				}
 			}
 		});
 		btnEditarAlunoEditar.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnEditarAlunoEditar.setBounds(493, 566, 206, 32);
+		btnEditarAlunoEditar.setBounds(308, 564, 206, 32);
 		PanelEditarAluno.add(btnEditarAlunoEditar);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -184,7 +190,7 @@ public class CadastroAlunoUI extends JFrame {
 		scrollPane.setViewportView(table);
 		
 		lblFotoEditar = new JLabel("");
-		lblFotoEditar.setBounds(939, 169, 230, 268);
+		lblFotoEditar.setBounds(874, 176, 230, 268);
 		PanelEditarAluno.add(lblFotoEditar);
 		
 		JLabel lblNome = new JLabel("Nome:");
@@ -204,12 +210,14 @@ public class CadastroAlunoUI extends JFrame {
 		PanelCadastrarAluno.add(lblSexo);
 		
 		JRadioButton rdbtnM = new JRadioButton("M");
+		rdbtnM.setBackground(new Color(224, 255, 255));
 		buttonGroupSexoCadastrar.add(rdbtnM);
 		rdbtnM.setFont(new Font("Tahoma", Font.BOLD, 18));
 		rdbtnM.setBounds(159, 117, 52, 28);
 		PanelCadastrarAluno.add(rdbtnM);
 		
 		JRadioButton rdbtnF = new JRadioButton("F");
+		rdbtnF.setBackground(new Color(224, 255, 255));
 		buttonGroupSexoCadastrar.add(rdbtnF);
 		rdbtnF.setFont(new Font("Tahoma", Font.BOLD, 18));
 		rdbtnF.setBounds(267, 117, 52, 28);
@@ -425,17 +433,7 @@ public class CadastroAlunoUI extends JFrame {
 		btnCancelar.setBounds(379, 561, 127, 31);
 		PanelCadastrarAluno.add(btnCancelar);
 		
-		JButton btnTirarFoto = new JButton("Tirar foto");
-		btnTirarFoto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				procuraArquivo();
-			}
-		});
-		btnTirarFoto.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnTirarFoto.setBounds(899, 359, 127, 23);
-		PanelCadastrarAluno.add(btnTirarFoto);
-		
-		lblFoto = new JLabel("Foto");
+		lblFoto = new JLabel("");
 		lblFoto.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFoto.setBounds(852, 79, 213, 251);
 		PanelCadastrarAluno.add(lblFoto);
@@ -444,6 +442,16 @@ public class CadastroAlunoUI extends JFrame {
 		lblCpf.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblCpf.setBounds(356, 118, 52, 25);
 		PanelCadastrarAluno.add(lblCpf);
+		
+		JButton button = new JButton("Selecionar foto [...]");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				procuraArquivo();
+			}
+		});
+		button.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		button.setBounds(862, 341, 194, 31);
+		PanelCadastrarAluno.add(button);
 		
 	
 		
@@ -528,27 +536,7 @@ public class CadastroAlunoUI extends JFrame {
 		table.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
 		
 	}
-	public void atualizar(){
-		CadastroAlunoUI.this.dispose();
-		//main(null);
-	}
 
-	public void procuraArquivo(){
-		String diretorioBase = System.getProperty("uder.home") + "/desktop";
-		File dir = new File(diretorioBase);
-		JFileChooser choose =  new JFileChooser();
-		choose.setCurrentDirectory(dir);
-		choose.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		caminhoArquivo = "";
-		int retorno = choose.showOpenDialog(null);
-		if(retorno == JFileChooser.APPROVE_OPTION ){
-			caminhoArquivo = choose.getSelectedFile().getAbsolutePath();
-			//txfArquivo.setText(caminhoArquivo);
-		}
-		ImageIcon icon = new ImageIcon(caminhoArquivo);
-		ImageIcon imgOff = new ImageIcon(icon.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
-		lblFoto.setIcon(imgOff);
-	}
 	
 	public void preencherFotoAluno(){
 		int idAluno = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
@@ -569,6 +557,33 @@ public class CadastroAlunoUI extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public void procuraArquivo(){
+		String diretorioBase = System.getProperty("uder.home") + "/desktop";
+		File dir = new File(diretorioBase);
+		JFileChooser choose =  new JFileChooser();
+		choose.setCurrentDirectory(dir);
+		choose.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		caminhoArquivo = "";
+		int retorno = choose.showOpenDialog(null);
+		if(retorno == JFileChooser.APPROVE_OPTION ){
+			caminhoArquivo = choose.getSelectedFile().getAbsolutePath();
+			//txfArquivo.setText(caminhoArquivo);
+		}
+//		ImageIcon icon = new ImageIcon(caminhoArquivo);
+//		ImageIcon imgOff = new ImageIcon(icon.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
+//		lblFoto.setIcon(imgOff);
+		
+		setLabelImage(caminhoArquivo);
+	}
+	public void setLabelImage(String caminhoArquivo){
+		ImageIcon icon = new ImageIcon(caminhoArquivo);
+		ImageIcon imgOff = new ImageIcon(icon.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
+		lblFoto.setIcon(imgOff);
+	}
+	public void atualiza(){
+		CadastroAlunoUI.this.dispose();
+		main(null);
 	}
 }
 

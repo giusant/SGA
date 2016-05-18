@@ -117,7 +117,8 @@ public class AtividadeDAO implements GenericDAO<AtividadeDTO> {
 		 try{
 				Connection connection = ConexaoUtil.getInstance().getConnection();
 				
-				String sql ="select sum(valor) from atividade where data between \" "+data+ " 00:00:00.00 \" "+" and \" "+ data+" 23:59:59.99\" "+ " and tipo =\"diaria\" ;";
+				String sql ="select sum(valor) from atividade where data Between \" "+data+ " 00:00:00.00 \" "+" and \" "+ data+" 23:59:59.99\" "+ 
+				" and (tipo =\"entrada\"  or tipo =\"diaria\" );";
 				PreparedStatement statement =  connection.prepareStatement(sql);
 				ResultSet resultSet = statement.executeQuery();
 				if(resultSet.next()){
@@ -137,7 +138,8 @@ public class AtividadeDAO implements GenericDAO<AtividadeDTO> {
 		 try{
 				Connection connection = ConexaoUtil.getInstance().getConnection();
 				
-				String sql ="select sum(valor) from atividade where data Between \" " +dataInicial+" \" and \" "+dataFinal+" \"";
+				String sql ="select sum(valor) from atividade where data Between \" " +dataInicial+" \" and \" "+dataFinal+" \""
+						+ " and (tipo =\"entrada\"  or tipo =\"diaria\" );";
 				
 				PreparedStatement statement =  connection.prepareStatement(sql);
 				ResultSet resultSet = statement.executeQuery();
@@ -152,5 +154,26 @@ public class AtividadeDAO implements GenericDAO<AtividadeDTO> {
 			}
 			return valorTotalMes;
 	}
+	public Double valorSaida(String data) throws PersistenciaException {
+		 
+		 double valorSaida = 0;	
+		 try{
+				Connection connection = ConexaoUtil.getInstance().getConnection();
+				
+				String sql ="select sum(valor) from atividade where data between \" "+data+ " 00:00:00.00 \" "+" and \" "+ data+" 23:59:59.99\" "+ "and tipo = \"saida\"  ;";
+				PreparedStatement statement =  connection.prepareStatement(sql);
+				ResultSet resultSet = statement.executeQuery();
+				if(resultSet.next()){
+					valorSaida = resultSet.getDouble("sum(valor)");
+				}
+				
+				connection.close();
+			}catch(Exception e){
+				e.printStackTrace();
+				throw new PersistenciaException(e.getMessage(), e);
+			}
+			return valorSaida;
+	}
+	
 
 }
